@@ -22,13 +22,13 @@
   let videoNode = null;
   let refreshInFlight = false;
   let priorFocus = null;
+  let currentVideoFrame = null;
+  let tvVideoFrame = null;
+  const defaultHeroSrc = document.querySelector('.hero-visual>img')?.getAttribute('src') || 'assets/flip-coastal-hero.jpg';
 
   function wa(text) { return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`; }
-  const rsvpMessage = 'Hallo Flip! Ek wil graag saam kom vier vir jou 60ste op 21 November om 17:00 by die Richardsbaai Skibootklub. My naam is: ';
   const vehicleMessage = 'Hallo Flip! Hier is my voertuigbesonderhede vir die 60ste:\nBestuurder (naam en van): \nVoertuig (maak): \nRegistrasienommer: ';
   const chatLinks = {
-    navRsvp: rsvpMessage,
-    mainRsvp: rsvpMessage,
     sharePhotoWhatsapp: 'Hallo Flip! Ek wil graag fotos of videos vir die Flip60-herinneringe deel.',
     nonCamperWhatsapp: vehicleMessage,
     camperWhatsapp: vehicleMessage
@@ -69,31 +69,85 @@
       image, original:orig, preview:safeHttps(input.previewUrl||input.viewUrl)||orig, video:safeHttps(input.videoUrl||input.streamUrl||''), createdAt:input.createdAt||'' };
   }
   function currentLabel(){return isFeedLoaded?`${currentIndex+1} / ${photos.length} HERINNERINGE`:'UITNODIGING-VOORSKOU';}
-  function updateImage(node,item){ if(node&&item){if(node.src!==new URL(item.image,document.baseURI).href) node.src=item.image;node.alt=item.name;} }
+  function updateImage(node,item){
+    if(!node||!item)return;
+    const nextUrl = new URL(item.image,document.baseURI).href;
+    if(node.src!==nextUrl)node.src=item.image;
+    node.alt=item.name;
+    node.onerror=()=>{node.onerror=null;node.src='assets/flip-coastal-hero.jpg';};
+  }
+  function brokenPhoto(container,item){
+    const card=document.createElement('div');card.className='reel-error';
+    const heading=document.createElement('strong');heading.textContent='Foto nie beskikbaar nie';
+    const info=document.createElement('span');info.textContent='Kyk dat hierdie foto in Google Drive vir gaste sigbaar is.';
+    const link=document.createElement('a');link.href=item.original;link.textContent='Bekyk in Google Drive ↗';link.target='_blank';link.rel='noopener noreferrer';
+    card.append(heading,info,link);container.replaceChildren(card);
+  }
+  function stopEmbeddedVideo(){
+    if(currentVideoFrame){currentVideoFrame.remove();currentVideoFrame=null;}
+    if(tvVideoFrame){tvVideoFrame.remove();tvVideoFrame=null;}
+  }
+  function showDriveVideo(container,item,asTv=false){
+    // Google Drive previews are not direct, autoplay-safe MP4 streams.
+    // Present the in-page Drive player on explicit interaction only.
+    if(!paused)togglePause();
+    const frame=document.createElement('iframe');
+    frame.className='video-iframe';frame.title='Flip60-video: '+item.name;
+    frame.src=item.preview;frame.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';
+    frame.allowFullscreen=true;frame.loading='eager';
+    container.appendChild(frame);
+    if(asTv){tvVideoFrame=frame;const placeholder=$('tvVideoPlaceholder');if(placeholder)placeholder.hidden=true;}
+    else {currentVideoFrame=frame;const poster=container.querySelector('.video-poster-overlay');if(poster)poster.hidden=true;}
+  }
   function createMainMedia(item){
     const container=$('mainMedia'); if(!container) return;
     const oldVideo=videoNode; videoNode=null;
     if(oldVideo){try{oldVideo.pause();oldVideo.removeAttribute('src');oldVideo.load();}catch(e){}}
+    stopEmbeddedVideo();
     container.replaceChildren();
     if(isVideo(item)&&item.video){
       const v=document.createElement('video');
       v.src=item.video;v.poster=item.image;v.autoplay=!paused;v.muted=true;v.playsInline=true;v.loop=false;v.preload='metadata';v.controls=true;
       v.style.cssText='width:100%;height:100%;object-fit:contain;background:#102f43';
-      v.addEventListener('error',()=>{if(v.parentNode) showVideoPoster(container,item);},{once:true});
+      v.addEventListener('error',()=>{if(v.parentNode)showVideoPoster(container,item);},{once:true});
       container.appendChild(v);videoNode=v;
       if(!paused)v.play().catch(()=>{});
     } else if(isVideo(item)){
       showVideoPoster(container,item);
     } else {
-      const image=document.createElement('img');image.src=item.image;image.alt=item.name;image.loading='eager';image.decoding='async';container.appendChild(image);
+      const image=document.createElement('img');image.src=item.image;image.alt=item.name;image.loading='eager';image.decoding='async';
+      image.onerror=()=>{if(image.parentNode)brokenPhoto(container,item);};
+      container.appendChild(image);
     }
     const caption=document.createElement('div');caption.className='reel-caption';caption.id='mediaCaption';caption.textContent=(isVideo(item)?'▶ VIDEO · ':'')+(item.caption||'Flip se herinneringe');container.appendChild(caption);
   }
   function showVideoPoster(container,item){
-    container.replaceChildren();const image=document.createElement('img');image.src=item.image;image.alt=item.name;container.appendChild(image);
-    const overlay=document.createElement('a');overlay.href=item.preview||item.original;overlay.target='_blank';overlay.rel='noopener noreferrer';overlay.className='video-open-overlay';overlay.setAttribute('aria-label',`Maak video oop: ${item.name}`);overlay.textContent='▶  SPEEL VIDEO OP GOOGLE DRIVE ↗';
-    overlay.style.cssText='position:absolute;inset:auto auto 50% 50%;transform:translate(-50%,50%);padding:17px 20px;max-width:85%;text-align:center;background:rgba(6,42,65,.9);color:white;border:1px solid rgba(255,255,255,.38);border-radius:999px;text-decoration:none;font:800 12px/1.5 Arial,sans-serif;letter-spacing:.08em';
-    container.appendChild(overlay);
+    container.replaceChildren();
+    const image=document.createElement('img');image.src=item.image;image.alt=item.name;image.loading='eager';
+    image.onerror=()=>{image.onerror=null;image.src=defaultHeroSrc;};container.appendChild(image);
+    const overlay=document.createElement('div');overlay.className='video-poster-overlay';
+    const play=document.createElement('button');play.type='button';play.textContent='▶ Speel video hier';
+    play.setAttribute('aria-label','Speel Drive-video: '+item.name);
+    play.addEventListener('click',()=>showDriveVideo(container,item,false));
+    const link=document.createElement('a');link.href=item.preview||item.original;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Of maak die video in Google Drive oop ↗';
+    overlay.append(play,link);container.appendChild(overlay);
+  }
+  function preloadNeighbours(){
+    [at(currentIndex+1),at(currentIndex+2)].forEach(item=>{
+      if(!isVideo(item)) {const img=new Image();img.src=item.image;}
+    });
+  }
+  function chooseDriveHero(items){
+    if(!config.AUTO_HERO_FROM_FEED) return;
+    const all=items.filter(item=>item.type==='image');
+    if(!all.length)return;
+    const preferredId=String(config.HERO_PHOTO_ID||'').trim();
+    const selected=all.find(item=>item.id===preferredId)||all.find(item=>/^(hero|cover|voorblad)[_\s-]/i.test(item.name))||all[0];
+    const hero=document.querySelector('.hero-visual>img');if(!hero)return;
+    const probe=new Image();
+    probe.onload=()=>{hero.src=selected.image;hero.alt='Foto uit Flip se 60ste-herinneringevouer: '+selected.name;hero.classList.add('drive-hero');};
+    probe.onerror=()=>{hero.src=defaultHeroSrc;hero.classList.remove('drive-hero');};
+    probe.src=selected.image;
   }
   function render(){
     if(!photos.length)photos=fallback.slice();
@@ -103,11 +157,10 @@
     const count=$('reelCount');if(count)count.textContent=currentLabel();
     updateImage($('tvPrevImage'),previous);updateImage($('tvNextImage'),next);
     const tvImage=$('tvImage'), tvVideo=$('tvVideoPlaceholder'), tvVideoLink=$('tvVideoLink');
-    if(isVideo(current)){
-      updateImage(tvImage,current);tvImage.hidden=false;
-      if(tvVideo){tvVideo.hidden=false;tvVideoLink.href=current.preview||current.original;}
-    } else {updateImage(tvImage,current);tvImage.hidden=false;if(tvVideo)tvVideo.hidden=true;}
+    updateImage(tvImage,current);tvImage.hidden=false;
+    if(tvVideo){tvVideo.hidden=!isVideo(current);if(isVideo(current))tvVideoLink.href=current.preview||current.original;}
     const tvCount=$('tvCount');if(tvCount)tvCount.textContent=`${currentIndex+1} / ${photos.length}`;
+    preloadNeighbours();
   }
   const progressNodes=[$('reelProgress'),$('tvProgress')].filter(Boolean);
   function setProgress(secondsElapsed=0){
@@ -138,13 +191,14 @@
   }
   $('prevSlide')?.addEventListener('click',()=>advance(-1));$('nextSlide')?.addEventListener('click',()=>advance(1));$('sidePrev')?.addEventListener('click',()=>advance(-1));$('sideNext')?.addEventListener('click',()=>advance(1));$('pauseSlide')?.addEventListener('click',togglePause);
   $('tvPrev')?.addEventListener('click',()=>advance(-1));$('tvNext')?.addEventListener('click',()=>advance(1));$('tvPause')?.addEventListener('click',togglePause);
+  $('tvVideoPlay')?.addEventListener('click',()=>{const item=at(currentIndex);if(isVideo(item))showDriveVideo($('tvOverlay').querySelector('.tv-main'),item,true);});
   function openTv(){
     if(modalIsOpen)return;
     priorFocus=document.activeElement;modalIsOpen=true;
     const overlay=$('tvOverlay'); overlay.hidden=false;document.body.classList.add('tv-open');
     render();$('closeTv').focus();
   }
-  function closeTv(){if(!modalIsOpen)return;modalIsOpen=false;$('tvOverlay').hidden=true;document.body.classList.remove('tv-open');if(typeof priorFocus?.focus==='function')priorFocus.focus();}
+  function closeTv(){if(!modalIsOpen)return;modalIsOpen=false;if(tvVideoFrame){tvVideoFrame.remove();tvVideoFrame=null;} $('tvOverlay').hidden=true;document.body.classList.remove('tv-open');if(typeof priorFocus?.focus==='function')priorFocus.focus();}
   $('openTv')?.addEventListener('click',openTv);$('closeTv')?.addEventListener('click',closeTv);
   document.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&modalIsOpen){closeTv();return;}
@@ -164,6 +218,25 @@
   }
 
   function setStatus(message){const status=$('feedStatus');if(status)status.textContent=message;}
+  function testThumbnail(url){
+    return new Promise(resolve=>{
+      let settled=false;const probe=new Image();
+      const finish=ok=>{if(settled)return;settled=true;clearTimeout(timeout);probe.onload=null;probe.onerror=null;resolve(ok);};
+      const timeout=setTimeout(()=>finish(false),5500);
+      probe.onload=()=>finish(true);probe.onerror=()=>finish(false);probe.src=url;
+    });
+  }
+  function verifyGuestPreview(items,imageCount,videoCount){
+    const testItems=items.filter(i=>i.type==='image').slice(0,3);if(!testItems.length)return;
+    const fingerprint=items.map(i=>i.id).slice(0,3).join('|')+'|'+items.length;
+    Promise.all(testItems.map(i=>testThumbnail(i.image))).then(results=>{
+      if(!isFeedLoaded || fingerprint!==photos.map(i=>i.id).slice(0,3).join('|')+'|'+photos.length)return;
+      const loaded=results.filter(Boolean).length;
+      if(loaded===0)setStatus(`Drive lys ${items.length} items, maar die toetsfoto’s is nie publiek sigbaar nie. Kontroleer Drive-toegang.`);
+      else if(loaded<results.length)setStatus(`Drive: ${imageCount} foto’s · ${videoCount} video’s. Net ${loaded}/${results.length} toetsfoto’s laai — kontroleer Drive-toegang.`);
+      else setStatus(`LIVE · ${imageCount} foto’s · ${videoCount} video’s · ${loaded}/${results.length} toetsfoto’s sigbaar · elke 2 min verfris`);
+    }).catch(()=>{});
+  }
   function parseResponse(data){
     if(!data)return[];
     const list=Array.isArray(data)?data:(data.items||data.images||data.photos||[]);
@@ -186,24 +259,39 @@
   }
   async function loadFeed(){
     if(refreshInFlight)return;
-    if(!photoFeedUrl){setStatus('Uitnodiging-voorskou. Koppel die nuwe Flip60 Drive-feed in config.js om alle foto’s te vertoon.');return;}
+    if(!photoFeedUrl){setStatus('Flip se Drive-vouer is ingestel, maar die live feed wag nog vir die nuwe Apps Script /exec-URL.');return;}
     refreshInFlight=true;
     try{
       const parsedUrl=new URL(photoFeedUrl);
-      if(parsedUrl.protocol!=='https:')throw new Error('Onveilige URL');
+      if(parsedUrl.protocol!=='https:')throw new Error('Onveilige feed-URL');
       let data;
-      try{data=await fetchJsonp(photoFeedUrl);}catch(_){const response=await fetch(photoFeedUrl,{cache:'no-store',redirect:'follow'});if(!response.ok)throw new Error('Feed unavailable');data=await response.json();}
+      try{data=await fetchJsonp(photoFeedUrl);}catch(_){
+        const response=await fetch(photoFeedUrl,{cache:'no-store',redirect:'follow'});
+        if(!response.ok)throw new Error('Feed unavailable');data=await response.json();
+      }
+      if(data && data.ok===false)throw new Error(data.error||'Drive-feed het ’n fout teruggestuur');
+      if(data && data.folderId && String(data.folderId)!==String(config.DRIVE_FOLDER_ID))throw new Error('Verkeerde Google Drive-vouer: kontroleer feed-URL');
       const items=parseResponse(data);
-      if(!items.length)throw new Error('Nog geen publieke foto’s in die vouer nie');
+      if(!items.length)throw new Error('Geen foto’s of video’s gevind nie');
       const oldId=photos[currentIndex]?.id;
+      const changed=items.length!==photos.length || items.some((item,i)=>item.id!==photos[i].id || item.image!==photos[i].image);
       photos=items;
-      const retained=oldId?photos.findIndex(x=>x.id===oldId):-1;
-      currentIndex=retained>=0?retained:0;
       isFeedLoaded=true;
-      render();
-      setStatus(`${items.length} foto’s en video’s uit Flip se Drive · verfris outomaties`);
-    }catch(e){setStatus('Die nuwe Drive-feed is nog nie beskikbaar nie — die uitnodigingsvoorskou bly intussen sigbaar.');console.warn('Flip60 feed:',e.message);}
-    finally{refreshInFlight=false;}
+      if(changed){
+        const retained=oldId?photos.findIndex(x=>x.id===oldId):-1;
+        currentIndex=retained>=0?retained:0;
+        render();
+      }
+      document.querySelector('.live-label')?.setAttribute('data-feed-live','true');
+      chooseDriveHero(items);
+      const imageCount=items.filter(item=>item.type==='image').length;
+      const videoCount=items.length-imageCount;
+      setStatus(`LIVE · ${imageCount} foto’s · ${videoCount} video’s · outomaties verfris elke 2 minute`);
+      verifyGuestPreview(items,imageCount,videoCount);
+    }catch(e){
+      setStatus('Live-fotofeed kon nie laai nie — kyk die Apps Script-skakel of Drive se deelinstellings.');
+      console.warn('Flip60 feed:',e.message);
+    }finally{refreshInFlight=false;}
   }
   $('refreshFeed')?.addEventListener('click',loadFeed);
   render();setProgress();schedule(INTERVAL);updatePauseUi();

@@ -1,58 +1,69 @@
-# Flip se 60ste · Still On Fire / 31.12 design-language edition
+# Flip60 — Live Google Drive Photo & Video Reel (Island Style / Still On Fire look)
 
-This is the **revised high-fidelity design-language build** after the initial Island Style website was rejected. It uses the original 31.12 editorial page's visual structure as a reference: dark-navy + image hero, serif lettering, five-piece event strip, split light-story/dark-RSVP invitation, dark memory reel, physical turntable motif, day timeline, practical notes and a full-width closing panel.
+## What is ready
 
-**Important provenance:** The actual 31.12 HTML and CSS were available for inspection; the project library surfaced the Still On Fire V33 ZIP name but did not allow its bytes to be extracted. Consequently, this version **is not a byte-for-byte branch of the V33 ZIP**. The working ordered memory reel code carried across from the previous Flip60 preview remains in `app.js` and is not affected by the layout redesign. Do not replace or overwrite Don's existing site or photo feed.
+The redesigned `index.html` retains the familiar **Still On Fire / 31.12** editorial layout. The RSVP form and RSVP navigation were removed. A scannable QR code in the dark-navy story panel points to Flip's exact Google Drive folder. The site includes the existing ordered, 10-second photo reel, pause/resume, manually stepping left/right, and a fullscreen TV reel.
 
-## Open / deploy
+The site and independent Google Apps Script are configured for **Flip's own Drive folder**:
 
-- Open `index.html` locally (with the `assets/` subdirectory) for preview, or host the entire folder as a static project on Vercel, GitHub Pages, Netlify or any static web host.
-- The deliverable also includes a standalone HTML file with embedded styles and image assets for easy preview.
-- Upload a new Vercel project called `flip60` from this folder. **Do not overwrite `still-on-fire` or `boarding-card-for-don`.**
+```
+https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link
+```
 
-## Information and RSVP
+**Current configuration (15 November 2026):** The new Flip60 Google Apps Script URL was supplied by the organiser and is now set in `config.js`. No existing Don/Still On Fire application or its feed has been touched. Live Google endpoint checks failed from the ChatGPT execution environment due to blocked network DNS; this is **not** proof that the endpoint is broken. Real Google file counts and guest image/video permissions remain unverified and must be checked in `feed-check.html` from a normal signed-out browser.
 
-- Saturday 21 November 2026, 17:00, Richardsbaai Skibootklub caravan park, Island Style.
-- WhatsApp is addressed to Flip's number from the supplied information poster: `072 3144 350`.
-- RSVP form opens a *draft WhatsApp message* with name, attendance and number of guests. The guest must still tap **Send** in WhatsApp. No message is sent silently, and no RSVP is recorded in a central database.
-- The programme and vehicle, camping, chairs/glasses, drinks and club restrictions follow the two supplied posters.
+## Published live feed — already configured
 
-## Connect the live Flip60 photo folder
+1. Use the script already deployed with the Google account that has permission to read Flip's folder; no need to create a second script.
+2. The copy of `google-apps-script/Code.gs` is included for future maintenance. Ensure the Google Apps Script deployment uses matching code.
+3. Optionally use `google-apps-script/appsscript.json` in Apps Script to limit the Drive permission to `drive.readonly`.
+4. In the existing Apps Script project, run `testFlip60` if the diagnostic says the folder cannot be read. The execution log shows the file counts.
+5. Confirm the existing deployment is **Web app → Execute as Me → Who has access: Anyone**. If permission changes or code changes are needed, use **Deploy → Manage deployments → Edit → New version → Deploy** to retain the same URL.
+6. Open `https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec?mode=health` in a private/signed-out browser. It should respond with `"ok":true`, folder ID `10qytscu6v9hxoqTLKuNcfqvbfkvB31P6`, and non-zero photo/video counts if the folder contains media.
+7. Open `feed-check.html`; the deployed URL is **pre-filled** and the check starts automatically. It checks counts and whether **real media thumbnails** load for visitors. If it shows failed images, check file/folder **viewing** permissions before distributing the site URL.
+8. The `/exec` URL has been written to `config.js`. Publish this Flip60 folder as its **own** static site, never by overwriting Don's project.
 
-The Drive folder is `10qytscu6v9hxoqTLKuNcfqvbfkvB31P6`.
+If you later change `Code.gs`, use **Deploy → Manage deployments → Edit → New version → Deploy** to update the same URL; a source-code save alone does not update the published web app.
 
-1. Sign into the Google account that owns / has authorized access to that folder.
-2. Open https://script.google.com and create a **new independent** Apps Script project.
-3. Paste the contents of `google-apps-script/Code.gs` into the new project.
-4. Deploy > New deployment > Web app > Execute as **Me** > Who has access: **Anyone**. Authorize if prompted.
-5. Copy the public web-app URL ending in `/exec` to `PHOTO_FEED_URL` in `config.js`.
-6. Grant appropriate viewing access to the photo files. Media previews fetched by a public website must be accessible to visitors. Do not share private media unintentionally.
+### Test direct endpoints
 
-The read-only script pulls full image/video metadata, sorts deterministically by creation time and file ID, and returns JSONP for cross-origin use. It does **not** shuffle or arbitrarily cap the photo list.
+- Feed (JSON): `https://script.google.com/macros/s/YOUR-DEPLOYMENT/exec?mode=feed`
+- Health (JSON): `https://script.google.com/macros/s/YOUR-DEPLOYMENT/exec?mode=health`
+- Website feed: Google Apps Script JSONP with a validated callback (read-only).
 
-### Reel behaviour
+Google's ContentService may redirect its output to `script.googleusercontent.com`. That is normal. The website uses JSONP with strict callback-name validation to avoid CORS restrictions. Do not use it for private data.
 
-- Main photo transitions every **10,000 milliseconds**.
-- Exactly the photo immediately to the right becomes the next centre image.
-- Previous / next and pause / resume work on the main reel and fullscreen TV view.
-- `?reel=tv` opens the fullscreen presentation.
-- Live feed refreshes every two minutes (if configured), retaining the current slide when possible.
-- Image `object-fit: contain` preserves visual content and avoids cropping into faces.
-- Google Drive videos are presented as thumbnails with a link to their Drive video unless a usable, embeddable MP4 URL is provided. Google Drive does not reliably support autoplay streaming as a direct `<video>` URL. Do not claim continuous video autoplay until such a media endpoint is connected.
+## Why viewing permissions matter
 
-The photo feed URL is empty by default. Until activated the site transparently displays the **invitation, information poster and an Island Style illustration as preview images**, not live photos.
+The Apps Script can read metadata using *your* Drive account. The actual photos/videos are loaded from Drive's public viewing URLs in *the guest's* browser. Those requests do not carry the Apps Script owner's authorization. As a result, **a green `ok:true` response alone does not prove guests can see the photos**. Use `feed-check.html` in a private/signed-out browser to test thumbnails.
+
+Do not inadvertently expose personal or sensitive media. Put only approved photos in Flip's celebration folder. Providing a QR code to the folder does not automatically grant guests upload permissions; the Google Drive sharing settings determine who can upload.
+
+## Reel behavior
+
+- Every photo displays for **10 seconds**.
+- **No shuffle.** The photo immediately to the right of the large centre photo becomes the next centre photo.
+- The feed lists **all** supported image/video files in the folder and nested folders, sorted deterministically by Drive creation date, then name and ID. No arbitrary 10/14-item cap.
+- The browser refreshes the list every **two minutes**, keeping the current photo when possible, and does not restart the reel on an unchanged feed.
+- Pause/resume, previous/next, fullscreen TV view, and direct `?reel=tv` TV link remain available.
+- Real Drive images replace the illustrative hero **once a viewable feed is connected**. For a specific preferred hero photo, add its file ID to `HERO_PHOTO_ID` in `config.js`, or name it starting with `hero` / `cover` / `voorblad`.
+- Direct HTTPS MP4 files can autoplay in `<video>` when `videoUrl` is available. **Google Drive is not a dependable public MP4 streaming endpoint.** Drive video items display a poster, and guests click “Speel video hier” to open the embedded Drive video player; this pauses the reel while they watch, with an “Open in Drive” fallback. Don't promise silent video autoplay from standard Drive links.
+- Until the `/exec` feed successfully loads, the reel shows a clearly labelled preview using the two supplied posters and one illustrative photo; it does **not** claim to show live Drive photos.
 
 ## Files
 
-- `index.html` — full revised page, in Afrikaans
-- `styles.css` — 31.12 / Still On Fire editorial styling
-- `app.js` — existing working Flip60 memory feed, carousel and fullscreen logic
-- `rsvp.js` — WhatsApp RSVP
-- `config.js` — separate Drive feed and organiser configuration
-- `google-apps-script/Code.gs` — read-only Flip60 photo feed
-- `assets/flip60-uitnodiging.jpeg`, `assets/flip60-belangrike-inligting.jpeg` — original user-provided posters
-- `assets/flip-coastal-hero.jpg` — illustrative Island Style coastal hero, not a photograph of Flip
+- `index.html` – complete redesigned website with QR block (no RSVP form)
+- `styles.css` – established navy/cream editorial theme, with QR and video-player styling
+- `app.js` – reel, full-screen player, Drive JSONP loader, refresh and image fallback
+- `config.js` – exact Flip folder ID and the supplied published Google Apps Script /exec URL
+- `feed-check.html` – browser-based real feed / thumbnail check
+- `google-apps-script/Code.gs` – new read-only script
+- `google-apps-script/appsscript.json` – least-privilege Drive read-only scope
+- `assets/flip60-foto-album-qr.png` – QR linking to user-supplied folder
+- `assets/flip60-*` posters – supplied artwork
 
-### Publishing status
+## Verification and delivery status
 
-No remote project was updated. `still-on-fire.vercel.app` and the existing Don invitation have not been changed.
+The exact published `/exec` URL has been connected. Local tests use simulated photo/video responses and prove the website handles all files, order, refresh, QR, and TV controls, but **the actual live Google response and visitor image permissions cannot be independently verified from the current runtime**. Use `feed-check.html` in a signed-out browser and confirm image previews appear. Do not announce the feed live until this verification succeeds.
+
+Neither the Don Vercel site nor its Drive feed is modified.

@@ -16,18 +16,17 @@
   <link rel="stylesheet" href="styles.css">
   <script src="config.js" defer></script>
   <script src="app.js" defer></script>
-  <script src="rsvp.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Spring na inhoud</a>
 <nav class="nav" id="top" aria-label="Hoofnavigasie">
   <div class="nav-inner">
     <a class="brand" href="#top" aria-label="Flip se 60ste — tuis">Flip se 60ste<small>Talent is permanent · 21 November 2026</small></a>
-    <div class="nav-links"><a href="#storie">Die storie</a><a href="#rsvp">RSVP</a><a href="#herinneringe">Herinneringe</a><a href="#program">Die naweek</a><a href="#reelings">Reëlings</a></div>
-    <a id="navRsvp" class="nav-rsvp" href="https://wa.me/27723144350" target="_blank" rel="noopener noreferrer">Kom vier saam <span aria-hidden="true">↗</span></a>
+    <div class="nav-links"><a href="#storie">Die storie</a><a href="#album">Foto-album</a><a href="#herinneringe">Herinneringe</a><a href="#program">Die naweek</a><a href="#reelings">Reëlings</a></div>
+    <a id="navAlbum" class="nav-rsvp" href="#album">Foto-album <span aria-hidden="true">↗</span></a>
     <button class="menu-toggle" type="button" aria-label="Maak kieslys oop" aria-expanded="false" aria-controls="mobileNav"><span></span><span></span><span></span></button>
   </div>
-  <div class="mobile-nav" id="mobileNav" hidden><a href="#storie">Die storie</a><a href="#rsvp">RSVP</a><a href="#herinneringe">Herinneringe</a><a href="#program">Die naweek</a><a href="#reelings">Reëlings</a></div>
+  <div class="mobile-nav" id="mobileNav" hidden><a href="#storie">Die storie</a><a href="#album">Foto-album</a><a href="#herinneringe">Herinneringe</a><a href="#program">Die naweek</a><a href="#reelings">Reëlings</a></div>
 </nav>
 
 <main id="main">
@@ -40,7 +39,7 @@
     <p class="hero-sub">Talent is permanent.<br>En die lewe is ’n lied.</p>
     <p class="hero-lead">60 jaar van lag, liefde en vriendskap. Een man wat ’n pa, ’n broer, ’n neef en ’n vriend is — en altyd daar is. Kom vier ’n lewe vol stories saam met ons.</p>
     <p class="hero-date">Saterdag 21 November 2026 <span aria-hidden="true">•</span> 17:00</p>
-    <div class="button-row"><a class="button primary" href="#rsvp">Ek kom vier saam <span aria-hidden="true">↗</span></a><a class="button secondary" href="#herinneringe">Bekyk die herinneringe <span aria-hidden="true">↘</span></a></div>
+    <div class="button-row"><a class="button primary" href="#album">Skandeer die QR-kode <span aria-hidden="true">↗</span></a><a class="button secondary" href="#herinneringe">Bekyk die herinneringe <span aria-hidden="true">↘</span></a></div>
     <div class="hero-signoff">1966 <span aria-hidden="true">——</span> 2026 <span class="hero-signoff-mark">60 somers onder die son</span></div>
   </div>
   <div class="hero-visual">
@@ -57,10 +56,10 @@
   <a href="#program"><b>17:00</b><strong>Die groot viering</strong><em>Island Style</em></a>
   <a href="#reelings"><b>WAAR</b><strong>Skibootklub</strong><em>Richardsbaai</em></a>
   <a href="#reelings"><b>KLEREDRAG</b><strong>Island Style</strong><em>Son. See. Stories.</em></a>
-  <a href="#rsvp"><b>RSVP</b><strong>Laat weet vir Flip</strong><em>072 3144 350</em></a>
+  <a href="#album"><b>FOTO-ALBUM</b><strong>60 jaar se stories</strong><em>Skandeer die QR</em></a>
 </div>
 
-<!-- Editorial invitation + bold navy RSVP panel, like the 31.12 invitation. -->
+<!-- 31.12-style editorial invitation with QR-linked album panel, without RSVP. -->
 <section class="section" id="storie" aria-labelledby="storyTitle">
   <div class="card invitation-panel">
     <div class="invitation-story">
@@ -71,21 +70,14 @@
       <p>Om vir Flip te ken is die grootste plesier. ’n Pa, ’n broer, ’n man, ’n neef en ’n vriend. Liefde sonder einde. Dít is die mooiste mooi wat oorbly.</p>
       <div class="original-invite"><img src="assets/flip60-uitnodiging.jpeg" alt="Flip se oorspronklike blou-en-wit Island Style-uitnodiging" loading="lazy"><div><span>Die oorspronklike uitnodiging</span><strong>Kom vier saam met ons!</strong><a href="assets/flip60-uitnodiging.jpeg" target="_blank" rel="noopener noreferrer">Bekyk die uitnodiging ↗</a></div></div>
     </div>
-    <aside class="rsvp-panel" id="rsvp" aria-labelledby="rsvpHeading">
-      <div class="kicker">Die uitnodiging</div>
-      <h3 id="rsvpHeading">Ons sien uit<br>om jou te sien.</h3>
-      <p>Saterdag, 21 November 2026 · 17:00<br><strong>Richardsbaai Skibootklub · Kampeerterrein</strong></p>
-      <div class="rsvp-rule"></div>
-      <form class="easy-rsvp" id="rsvpForm">
-        <label for="guestName">Jou naam en van</label>
-        <input id="guestName" name="name" placeholder="Naam en van" type="text" maxlength="100" autocomplete="name" required>
-        <label for="guestCount">Hoeveel mense?</label>
-        <div class="people-field"><button id="countMinus" type="button" aria-label="Een persoon minder">−</button><input id="guestCount" name="people" type="number" min="1" max="50" value="1" inputmode="numeric"><button id="countPlus" type="button" aria-label="Een persoon meer">+</button></div>
-        <fieldset class="attendance-field"><legend>Kan jy saam kom vier?</legend><label class="attendance-option"><input type="radio" name="response" value="yes" checked><span>Ja, ek is daar!</span></label><label class="attendance-option"><input type="radio" name="response" value="no"><span>Jammer, ek kan nie</span></label></fieldset>
-        <button class="button primary send-rsvp" type="submit" id="rsvpSubmit">Stuur RSVP op WhatsApp <span aria-hidden="true">↗</span></button>
-        <p class="rsvp-status" id="rsvpStatus" role="status" aria-live="polite">Jou antwoord sal direk in WhatsApp aan Flip oopmaak — geen registrasie nodig nie.</p>
-      </form>
-      <p class="rsvp-direct">Of WhatsApp Flip direk: <a href="https://wa.me/27723144350" target="_blank" rel="noopener noreferrer">072 3144 350 ↗</a></p>
+    <aside class="album-panel" id="album" aria-labelledby="albumHeading">
+      <div class="kicker">Die herinneringe leef voort</div>
+      <h3 id="albumHeading">Elke foto.<br><em>’n Storie.</em></h3>
+      <p>Die lekkerste oomblikke verdien ’n plek in Flip se 60ste-herinneringeboek. Skandeer die kode om die foto-album oop te maak.</p>
+      <a class="album-qr" href="https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Maak Flip se Google Drive-foto-album oop"><img src="assets/flip60-foto-album-qr.png" alt="QR-kode na Flip se Google Drive-foto-album" loading="lazy" width="280" height="280"></a>
+      <div class="qr-label">SKANDEER VIR FLIP SE FOTO-ALBUM</div>
+      <a class="button primary album-open" href="https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link" target="_blank" rel="noopener noreferrer">Maak die album oop <span aria-hidden="true">↗</span></a>
+      <p class="album-note">Wil jy ’n foto byvoeg? Die vouer se Google Drive-deelinstellings bepaal wie kan oplaai. Jy kan dit ook direk vir Flip stuur.</p>
     </aside>
   </div>
 </section>
@@ -127,11 +119,11 @@
   <div class="practical-grid"><div class="practical-item"><strong>Kleredrag</strong><span>Island Style — bring jou eilandgees saam.</span></div><div class="practical-item"><strong>Bring saam</strong><span>Eie kampstoele en drinkglase. Ys word voorsien.</span></div><div class="practical-item"><strong>Eie drankies</strong><span>Gee af by nr. 1 Musselcracker op 19 of 20 November. Merk asseblief.</span></div><div class="practical-item"><strong>Klubreëls</strong><span>Geen drank van buite op die Skibootklub-perseel nie, behalwe in die karavaanpark.</span></div></div>
   <div class="notice-row"><div><span>AMPTELIKE INLIGTING</span><strong>Alles op een blad.</strong><p>Die oorspronklike kennisgewing bevat die volledige praktiese reëlings.</p><a href="assets/flip60-belangrike-inligting.jpeg" target="_blank" rel="noopener noreferrer">Maak die plakkaat oop ↗</a></div><a class="notice-image" href="assets/flip60-belangrike-inligting.jpeg" target="_blank" rel="noopener noreferrer"><img src="assets/flip60-belangrike-inligting.jpeg" alt="Amptelike plakkaat met Flip se naweekreëlings" loading="lazy"></a></div>
 </div></section>
-<section class="section closing-card" id="finale"><div class="kicker">’n Lewe vol liefde, vriendskap en stories</div><h2>Om vir Flip te ken,<br>is die <em>grootste plesier.</em></h2><p>Veels geluk, ou neef. Kom vier saam ’n besonderse mens — ’n man wie se lewe ’n lied is.</p><div class="button-row"><a class="button primary" id="mainRsvp" href="https://wa.me/27723144350" target="_blank" rel="noopener noreferrer">Laat weet vir Flip <span aria-hidden="true">↗</span></a><a class="button secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Richardsbaai+Skibootklub" target="_blank" rel="noopener noreferrer">Kry aanwysings ↗</a></div><div class="closing-sign">TALENT IS PERMANENT <span>✳</span> DIE LEWE IS ’N LIED</div></section>
+<section class="section closing-card" id="finale"><div class="kicker">’n Lewe vol liefde, vriendskap en stories</div><h2>Om vir Flip te ken,<br>is die <em>grootste plesier.</em></h2><p>Veels geluk, ou neef. Kom vier saam ’n besonderse mens — ’n man wie se lewe ’n lied is.</p><div class="button-row"><a class="button primary" id="mainAlbum" href="#album">Ons foto-album <span aria-hidden="true">↗</span></a><a class="button secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Richardsbaai+Skibootklub" target="_blank" rel="noopener noreferrer">Kry aanwysings ↗</a></div><div class="closing-sign">TALENT IS PERMANENT <span>✳</span> DIE LEWE IS ’N LIED</div></section>
 </main>
 <footer class="footer"><span>Flip se 60ste · 21 November 2026 · Richardsbaai</span><a href="#top">Terug boontoe ↑</a></footer>
 
-<div class="tv-overlay" id="tvOverlay" role="dialog" aria-modal="true" aria-label="Flip se volskerm foto-reel" hidden><div class="tv-bar"><span>FLIP 60 · LIVE HERINNERINGE</span><div><span id="tvCount"></span><button id="tvPause" type="button" aria-label="Pouseer volskerm-reel">Ⅱ</button><button id="closeTv" type="button" aria-label="Maak volskerm-reel toe">×</button></div></div><div class="tv-view"><button id="tvPrev" type="button" class="tv-adj" aria-label="Vorige foto"><img id="tvPrevImage" src="assets/flip60-belangrike-inligting.jpeg" alt="Vorige foto"></button><div class="tv-main"><img id="tvImage" src="assets/flip60-uitnodiging.jpeg" alt="Hooffoto"><div class="tv-video-placeholder" id="tvVideoPlaceholder" hidden><span>▶</span><p>VIDEO</p><a href="#" id="tvVideoLink" target="_blank" rel="noopener noreferrer">Maak die video oop ↗</a></div><div class="tv-progress"><div id="tvProgress"></div></div></div><button id="tvNext" type="button" class="tv-adj" aria-label="Volgende foto"><img id="tvNextImage" src="assets/flip60-belangrike-inligting.jpeg" alt="Volgende foto"></button></div><div class="tv-foot">TALENT IS PERMANENT <span>✳</span> DIE LEWE IS ’N LIED</div></div>
-<noscript><p class="noscript">Skakel JavaScript aan om die live reel en RSVP te gebruik.</p></noscript>
+<div class="tv-overlay" id="tvOverlay" role="dialog" aria-modal="true" aria-label="Flip se volskerm foto-reel" hidden><div class="tv-bar"><span>FLIP 60 · LIVE HERINNERINGE</span><div><span id="tvCount"></span><button id="tvPause" type="button" aria-label="Pouseer volskerm-reel">Ⅱ</button><button id="closeTv" type="button" aria-label="Maak volskerm-reel toe">×</button></div></div><div class="tv-view"><button id="tvPrev" type="button" class="tv-adj" aria-label="Vorige foto"><img id="tvPrevImage" src="assets/flip60-belangrike-inligting.jpeg" alt="Vorige foto"></button><div class="tv-main"><img id="tvImage" src="assets/flip60-uitnodiging.jpeg" alt="Hooffoto"><div class="tv-video-placeholder" id="tvVideoPlaceholder" hidden><span>▶</span><p>VIDEO-HERINNERING</p><button type="button" class="tv-video-play" id="tvVideoPlay">▶ Speel hier</button><a href="#" id="tvVideoLink" target="_blank" rel="noopener noreferrer">Of maak in Drive oop ↗</a></div><div class="tv-progress"><div id="tvProgress"></div></div></div><button id="tvNext" type="button" class="tv-adj" aria-label="Volgende foto"><img id="tvNextImage" src="assets/flip60-belangrike-inligting.jpeg" alt="Volgende foto"></button></div><div class="tv-foot">TALENT IS PERMANENT <span>✳</span> DIE LEWE IS ’N LIED</div></div>
+<noscript><p class="noscript">Skakel JavaScript aan om die live foto- en video-reel te gebruik.</p></noscript>
 </body>
 </html>
