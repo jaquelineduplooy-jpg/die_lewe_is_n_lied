@@ -67,3 +67,20 @@ Do not inadvertently expose personal or sensitive media. Put only approved photo
 The exact published `/exec` URL has been connected. Local tests use simulated photo/video responses and prove the website handles all files, order, refresh, QR, and TV controls, but **the actual live Google response and visitor image permissions cannot be independently verified from the current runtime**. Use `feed-check.html` in a signed-out browser and confirm image previews appear. Do not announce the feed live until this verification succeeds.
 
 Neither the Don Vercel site nor its Drive feed is modified.
+
+
+## V4 — Still On Fire-style MOVING FEED + LIVE REEL + QR
+
+- The restored **moving filmstrip** (`#memoryTrack`) shows a real left-moving progression every 10 seconds, with the immediately right-adjacent image sliding to the centre. It is windowed to nine elements and works for arbitrarily large Drive feeds. No shuffling or 14-photo cap.
+- The original large **Live Reel** remains below the moving strip, and is mirrored in the dedicated full-window TV mode (`?reel=tv`). Both use the same state, media and pause/previous/next controls.
+- The **QR code is visible beside the Live Reel and inside the full-screen Live Reel**. It opens Flip's supplied Drive folder. Drive sharing settings determine who can add photos.
+- The configured Apps Script `/exec` remains the user's supplied URL; Don's site and script are unchanged. Real Drive image permissions still require a signed-out browser test.
+
+
+## V5: premium 1966 Island Style hero refresh (15 Nov 2026)
+
+- The split hero now shows two original, tropical 1960s inspired photos: a vintage turquoise/cream Kombi with surfboards and an outdoor vinyl-party still life. Both are *illustrative AI artwork*, not archival photographs of Flip.
+- Clickable KOMBI '66 / VINIEL & SEE switches and a gentle 8-second crossfade. Stops automatically for people who prefer reduced motion.
+- Added postcard-style original 1966 badge and coral highlights on the hero, keeping the Still On Fire / 31.12 editorial structure.
+- `AUTO_HERO_FROM_FEED` set false to prevent an arbitrary Google Drive image from replacing the commissioned hero art. **The Google Drive memory and TV reels remain live-configured and unchanged.**
+- Drive access still must be checked in a signed-out browser to confirm real photographs load.

@@ -25,6 +25,79 @@
   let currentVideoFrame = null;
   let tvVideoFrame = null;
   const defaultHeroSrc = document.querySelector('.hero-visual>img')?.getAttribute('src') || 'assets/flip-coastal-hero.jpg';
+  // Small, windowed moving filmstrip: only nine visible DOM images even for large Drive folders.
+  // This is the moving reel omitted from the previous Flip60 version.
+  const filmTrack=$('memoryTrack'), filmWindow=$('filmWindow');
+  const FILM_CENTER=3, FILM_COUNT=9, FILM_SLIDE_MS=890;
+  let filmTransitionToken=0, filmAnimationTimeout=null;
+  function filmThumbnail(item){
+    try{
+      const url=new URL(item.image,document.baseURI);
+      if(url.hostname==='drive.google.com'&&url.pathname==='/thumbnail'){
+        url.searchParams.set('sz','w720');
+        return url.toString();
+      }
+    }catch(_){}
+    return item.image;
+  }
+  function makeFilmFrame(item,position){
+    const frame=document.createElement('div');frame.className='film-frame';
+    if(position===FILM_CENTER)frame.classList.add('is-center');
+    else if(Math.abs(position-FILM_CENTER)===1)frame.classList.add('is-near');
+    frame.setAttribute('aria-label',item.name);
+    const img=document.createElement('img');img.src=filmThumbnail(item);img.alt=item.name;
+    img.loading=Math.abs(position-FILM_CENTER)>3?'lazy':'eager';img.decoding='async';
+    img.onerror=()=>{img.onerror=null;img.src='assets/flip-coastal-hero.jpg';};
+    frame.appendChild(img);
+    if(isVideo(item)){const video=document.createElement('span');video.className='film-frame-video';video.textContent='▶ VIDEO';frame.appendChild(video);}
+    const caption=document.createElement('div');caption.className='film-frame-caption';caption.textContent=item.caption||item.name;frame.appendChild(caption);
+    return frame;
+  }
+  function filmMeasurements(){
+    const frame=filmTrack?.querySelector('.film-frame');
+    if(!frame||!filmWindow)return null;
+    const gap=parseFloat(getComputedStyle(filmTrack).gap)||0;
+    const width=frame.getBoundingClientRect().width;
+    return {step:width+gap,left:filmWindow.clientWidth/2-width/2};
+  }
+  function setFilmPosition(position,animated){
+    const sizes=filmMeasurements();if(!sizes||!filmTrack)return;
+    filmTrack.style.transition=animated?`left ${FILM_SLIDE_MS}ms cubic-bezier(.22,.76,.22,1)`:'none';
+    filmTrack.style.left=`${Math.round(sizes.left-position*sizes.step)}px`;
+  }
+  function fillFilm(startIndex){
+    if(!filmTrack||!photos.length)return;
+    const nodes=[];
+    for(let k=0;k<FILM_COUNT;k++)nodes.push(makeFilmFrame(at(startIndex+k-FILM_CENTER),k));
+    filmTrack.replaceChildren(...nodes);
+    $('filmCount').textContent=isFeedLoaded?`${photos.length} FOTO'S EN VIDEO'S · LAAI OUTOMATIES`:'VOORSKOU · WAG VIR GOOGLE DRIVE';
+  }
+  function resetFilm(){
+    if(!filmTrack)return;
+    ++filmTransitionToken;
+    clearTimeout(filmAnimationTimeout);
+    fillFilm(currentIndex);setFilmPosition(FILM_CENTER,false);
+    filmTrack.querySelector('.film-frame.is-center')?.setAttribute('data-active-id',at(currentIndex).id);
+  }
+  function shiftFilm(fromIndex,step){
+    if(!filmTrack)return;
+    if(Math.abs(step)!==1||matchMedia('(prefers-reduced-motion: reduce)').matches){resetFilm();return;}
+    const token=++filmTransitionToken;
+    clearTimeout(filmAnimationTimeout);
+    fillFilm(fromIndex);setFilmPosition(FILM_CENTER,false);
+    // Reading the current transform flushes the start position before the slide.
+    void filmTrack.offsetWidth;
+    const target=FILM_CENTER+step;
+    // Next photograph is the one immediately to the right and visually slides LEFT into focus.
+    for(const [index,child] of [...filmTrack.children].entries()){
+      child.classList.toggle('is-center',index===target);
+      child.classList.toggle('is-near',Math.abs(index-target)===1);
+    }
+    setFilmPosition(target,true);
+    filmAnimationTimeout=setTimeout(()=>{if(token===filmTransitionToken)resetFilm();},FILM_SLIDE_MS+40);
+  }
+  window.addEventListener('resize',()=>{if(filmTrack)resetFilm();},{passive:true});
+
 
   function wa(text) { return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`; }
   const vehicleMessage = 'Hallo Flip! Hier is my voertuigbesonderhede vir die 60ste:\nBestuurder (naam en van): \nVoertuig (maak): \nRegistrasienommer: ';
@@ -99,8 +172,10 @@
     if(asTv){tvVideoFrame=frame;const placeholder=$('tvVideoPlaceholder');if(placeholder)placeholder.hidden=true;}
     else {currentVideoFrame=frame;const poster=container.querySelector('.video-poster-overlay');if(poster)poster.hidden=true;}
   }
-  function createMainMedia(item){
+  function createMainMedia(item, direction=0){
     const container=$('mainMedia'); if(!container) return;
+    const outgoing=direction!==0 && !isVideo(item) ? container.querySelector('img:not(.reel-old-ghost)') : null;
+    const oldPicture=outgoing && outgoing.complete && outgoing.naturalWidth ? outgoing.currentSrc : '';
     const oldVideo=videoNode; videoNode=null;
     if(oldVideo){try{oldVideo.pause();oldVideo.removeAttribute('src');oldVideo.load();}catch(e){}}
     stopEmbeddedVideo();
@@ -118,6 +193,20 @@
       const image=document.createElement('img');image.src=item.image;image.alt=item.name;image.loading='eager';image.decoding='async';
       image.onerror=()=>{if(image.parentNode)brokenPhoto(container,item);};
       container.appendChild(image);
+    }
+    if(direction!==0 && !isVideo(item)){
+      const nextPicture=container.querySelector(':scope > img');
+      if(nextPicture){
+        const motion=direction>0?'next':'prev';
+        nextPicture.classList.add('reel-arrive-'+motion);
+        if(oldPicture){
+          const departing=document.createElement('div');
+          departing.style.backgroundImage=`url(${JSON.stringify(oldPicture)})`;departing.setAttribute('aria-hidden','true');
+          departing.className='reel-old-ghost reel-depart-'+motion;
+          container.appendChild(departing);
+          setTimeout(()=>{if(departing.parentNode)departing.remove();},820);
+        }
+      }
     }
     const caption=document.createElement('div');caption.className='reel-caption';caption.id='mediaCaption';caption.textContent=(isVideo(item)?'▶ VIDEO · ':'')+(item.caption||'Flip se herinneringe');container.appendChild(caption);
   }
@@ -149,17 +238,35 @@
     probe.onerror=()=>{hero.src=defaultHeroSrc;hero.classList.remove('drive-hero');};
     probe.src=selected.image;
   }
-  function render(){
+  function render(direction=0){
     if(!photos.length)photos=fallback.slice();
     const previous=at(currentIndex-1), current=at(currentIndex), next=at(currentIndex+1);
     updateImage($('prevImage'),previous);updateImage($('nextImage'),next);
-    createMainMedia(current);
+    createMainMedia(current,direction);
     const count=$('reelCount');if(count)count.textContent=currentLabel();
     updateImage($('tvPrevImage'),previous);updateImage($('tvNextImage'),next);
     const tvImage=$('tvImage'), tvVideo=$('tvVideoPlaceholder'), tvVideoLink=$('tvVideoLink');
+    const tvMain=tvImage?.parentElement;
+    const tvOldSrc=(direction!==0 && !isVideo(current) && tvImage && tvImage.complete && tvImage.naturalWidth)?tvImage.currentSrc:'';
+    if(tvMain)tvMain.querySelectorAll('.tv-old-ghost').forEach(node=>node.remove());
     updateImage(tvImage,current);tvImage.hidden=false;
+    if(tvImage){
+      tvImage.classList.remove('tv-arrive-next','tv-arrive-prev');
+      if(direction!==0 && !isVideo(current)){
+        void tvImage.offsetWidth;
+        const motion=direction>0?'next':'prev';
+        tvImage.classList.add('tv-arrive-'+motion);
+        if(tvOldSrc && tvMain){
+          const departing=document.createElement('div');departing.className='tv-old-ghost reel-depart-'+motion;
+          departing.style.backgroundImage=`url(${JSON.stringify(tvOldSrc)})`;
+          departing.setAttribute('aria-hidden','true');tvMain.appendChild(departing);
+          setTimeout(()=>{if(departing.parentElement)departing.remove();},850);
+        }
+      }
+    }
     if(tvVideo){tvVideo.hidden=!isVideo(current);if(isVideo(current))tvVideoLink.href=current.preview||current.original;}
-    const tvCount=$('tvCount');if(tvCount)tvCount.textContent=`${currentIndex+1} / ${photos.length}`;
+    const tvCount=$('tvCount');if(tvCount)tvCount.textContent=isFeedLoaded?`${currentIndex+1} / ${photos.length}`:'VOORSKOU';
+    const tvFeed=$('tvFeedStatus');if(tvFeed)tvFeed.textContent=isFeedLoaded?'GOOGLE DRIVE · LIVE':'WAG VIR DRIVE-FEED';
     preloadNeighbours();
   }
   const progressNodes=[$('reelProgress'),$('tvProgress')].filter(Boolean);
@@ -184,7 +291,7 @@
     progressNodes.forEach(el=>el.style.animationPlayState=paused?'paused':'running');
     if(videoNode){if(paused)videoNode.pause();else videoNode.play().catch(()=>{});}
   }
-  function advance(step){currentIndex=wrapIndex(currentIndex+step);render();elapsedWhenPaused=0;setProgress(0);schedule(INTERVAL);updatePauseUi();}
+  function advance(step){const fromIndex=currentIndex;currentIndex=wrapIndex(currentIndex+step);render(step);shiftFilm(fromIndex,step);elapsedWhenPaused=0;setProgress(0);schedule(INTERVAL);updatePauseUi();}
   function togglePause(){
     if(paused){paused=false;const remaining=Math.max(40,INTERVAL-elapsedWhenPaused);schedule(remaining);}else{elapsedWhenPaused=Math.min(INTERVAL,performance.now()-cycleStarted);paused=true;clearTimeout(tickId);tickId=null;}
     updatePauseUi();
@@ -199,7 +306,7 @@
     render();$('closeTv').focus();
   }
   function closeTv(){if(!modalIsOpen)return;modalIsOpen=false;if(tvVideoFrame){tvVideoFrame.remove();tvVideoFrame=null;} $('tvOverlay').hidden=true;document.body.classList.remove('tv-open');if(typeof priorFocus?.focus==='function')priorFocus.focus();}
-  $('openTv')?.addEventListener('click',openTv);$('closeTv')?.addEventListener('click',closeTv);
+  $('openTv')?.addEventListener('click',openTv);$('openTvFromQr')?.addEventListener('click',openTv);$('closeTv')?.addEventListener('click',closeTv);
   document.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&modalIsOpen){closeTv();return;}
     if(modalIsOpen&&(event.key==='ArrowRight'||event.key==='ArrowLeft')){event.preventDefault();advance(event.key==='ArrowRight'?1:-1);}
@@ -280,7 +387,7 @@
       if(changed){
         const retained=oldId?photos.findIndex(x=>x.id===oldId):-1;
         currentIndex=retained>=0?retained:0;
-        render();
+        render();resetFilm();
       }
       document.querySelector('.live-label')?.setAttribute('data-feed-live','true');
       chooseDriveHero(items);
@@ -294,7 +401,7 @@
     }finally{refreshInFlight=false;}
   }
   $('refreshFeed')?.addEventListener('click',loadFeed);
-  render();setProgress();schedule(INTERVAL);updatePauseUi();
+  render();resetFilm();setProgress();schedule(INTERVAL);updatePauseUi();
   loadFeed();
   if(photoFeedUrl){window.setInterval(loadFeed,Math.max(30000,Number(config.FEED_REFRESH_MS)||120000));}
   document.addEventListener('visibilitychange',()=>{

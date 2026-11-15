@@ -9,13 +9,14 @@
   <meta property="og:locale" content="af_ZA">
   <meta property="og:title" content="Flip se 60ste | Talent is permanent">
   <meta property="og:description" content="60 jaar se stories. Een ongelooflike mens. Saterdag 21 November 2026, 17:00 — Richardsbaai Skibootklub.">
-  <meta property="og:image" content="assets/flip-coastal-hero.jpg">
-  <meta property="og:image:alt" content="Island Style: 'n nostalgiese strandtoneel met 'n branderplank en vinielspeler.">
+  <meta property="og:image" content="assets/flip-1966-kombi.jpg">
+  <meta property="og:image:alt" content="Flip se Island Style 1966: vintage Kombi, branderplanke en vinielspeler.">
   <title>Flip se 60ste · Talent is permanent</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <script src="config.js" defer></script>
   <script src="app.js" defer></script>
+  <script src="hero.js" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Spring na inhoud</a>
@@ -42,9 +43,15 @@
     <div class="button-row"><a class="button primary" href="#album">Skandeer die QR-kode <span aria-hidden="true">↗</span></a><a class="button secondary" href="#herinneringe">Bekyk die herinneringe <span aria-hidden="true">↘</span></a></div>
     <div class="hero-signoff">1966 <span aria-hidden="true">——</span> 2026 <span class="hero-signoff-mark">60 somers onder die son</span></div>
   </div>
-  <div class="hero-visual">
-    <img src="assets/flip-coastal-hero.jpg" alt="Nostalgiese Island Style-strandtoneel met ’n branderplank, vinielspeler, see en jacarandas in blom" fetchpriority="high">
+  <div class="hero-visual" aria-label="Somer van 1966: twee Island Style-tonele" data-hero-carousel>
+    <img class="hero-scene is-active" src="assets/flip-1966-kombi.webp" alt="Vrolike 1966-strandpartytjie met 'n turkoois-en-roomkleurige vintage Kombi, branderplanke, hibiskusblomme en 'n vinielspeler" fetchpriority="high" decoding="async">
+    <img class="hero-scene" src="assets/flip-1966-vinyl.webp" alt="Kleurryke 1960's strandtoneel met 'n vinielspeler, tropiese blomme, branderplank, jacarandas en koeldrank" loading="lazy" decoding="async" aria-hidden="true">
     <div class="hero-visual-shade" aria-hidden="true"></div>
+    <div class="hero-postcard" aria-hidden="true"><span>ORIGINAL EDITION</span><strong>1966</strong><small>SON · VINIEL · STORIES</small></div>
+    <div class="hero-scene-nav" role="group" aria-label="Kies die 1966-hero-prent">
+      <button type="button" class="is-selected" data-hero-scene="0" aria-pressed="true" aria-label="Wys vintage Kombi met branderplanke">KOMBI ’66</button>
+      <button type="button" data-hero-scene="1" aria-pressed="false" aria-label="Wys strandviniel en eilandstyl">VINIEL &amp; SEE</button>
+    </div>
     <div class="hero-venue"><span>ISLAND STYLE · RICHARDSBAAI</span><strong>Richardsbaai Skibootklub</strong><small>Karavaanpark · 21 November 2026 · 17:00</small></div>
     <div class="hero-year">60<small>JAAR</small></div>
   </div>
@@ -85,14 +92,22 @@
 <!-- The actual live reel: preserve the old app.js IDs, ordered handoff, TV modal and pause controls. -->
 <section class="section reel-section" id="herinneringe" aria-labelledby="memoriesTitle">
   <div class="card memory-card">
-    <div class="memory-top"><div><div class="kicker">Die Live Memory Reel</div><h2 class="section-title" id="memoriesTitle">60 jaar se <em>stories.</em></h2></div><div class="memory-head-side"><p>Die mense. Die oomblikke. Die mooiste herinneringe. Só onthou ons Flip.</p><div class="memory-head-actions"><button type="button" id="refreshFeed" class="small-outline">↻ Verfris foto's</button><button type="button" id="openTv" class="small-outline filled">▣ Groot skerm</button></div></div></div>
+    <div class="memory-top"><div><div class="kicker">Die Memory Reel • Soos Still On Fire</div><h2 class="section-title" id="memoriesTitle">60 jaar se <em>stories.</em></h2></div><div class="memory-head-side"><p>Die mense. Die oomblikke. Die mooiste herinneringe. Só onthou ons Flip.</p><div class="memory-head-actions"><button type="button" id="refreshFeed" class="small-outline">↻ Verfris foto's</button><button type="button" id="openTv" class="small-outline filled">▶ Live Reel / Groot skerm</button></div></div></div>
+    <!-- V33-style MOVING memory filmstrip. Synced to the same ordered 10-second reel as the main player and TV. -->
+    <div class="film-river" id="filmRiver" aria-label="Bewegende foto- en videoherinneringe">
+      <div class="film-river-heading"><div><span class="film-overline"><span class="film-live-dot"></span> DIE BEWEGENDE FOTOFEED</span><h3>Elke foto skuif die storie aan.</h3></div><span class="film-motion-note">DIE FOTO REGS IS VOLGENDE <span aria-hidden="true">←</span></span></div>
+      <div class="film-window" id="filmWindow"><div class="film-track" id="memoryTrack" aria-live="off"></div></div>
+      <div class="film-river-foot"><span>10 SEKONDES PER FOTO · GEEN SKOMMELING NIE</span><span id="filmCount">UITNODIGING-VOORSKOU</span></div>
+    </div>
+    <div class="live-reel-title"><span class="film-overline">LIVE REEL / GROOT SKERM</span><h3>Die volgende foto <em>skuif in.</em></h3><p>Speel die foto’s en video’s op ’n groot skerm — die volgende foto kom altyd van regs.</p></div>
     <div class="reel-player" id="reelPlayer" aria-label="Flip se foto- en video-reel"><div class="player-top"><span class="live-label"><i></i> FLIP 60 · LIVE MEMORY REEL</span><span id="reelCount">VOORSKOU</span></div>
       <div class="reel-viewport"><button type="button" class="reel-side prev-tile" id="sidePrev" aria-label="Vorige foto"><img id="prevImage" src="assets/flip60-belangrike-inligting.jpeg" alt="Vorige foto"><span class="tile-arrow">‹</span></button>
         <div class="reel-center"><div id="mainMedia" class="reel-media"><img id="mainImage" src="assets/flip60-uitnodiging.jpeg" alt="Flip se uitnodiging"><div class="reel-caption" id="mediaCaption">FLIP SE UITNODIGING</div></div><div class="reel-progress-track" aria-hidden="true"><div id="reelProgress"></div></div></div>
         <button type="button" class="reel-side next-tile" id="sideNext" aria-label="Volgende foto"><img id="nextImage" src="assets/flip60-belangrike-inligting.jpeg" alt="Volgende foto"><span class="tile-arrow">›</span></button>
       </div>
-      <div class="player-bottom"><span id="feedStatus" role="status" aria-live="polite">Die nuwe Flip Drive-feed wag vir aktivering.</span><div class="player-controls"><button type="button" id="prevSlide" aria-label="Vorige foto">‹</button><button type="button" id="pauseSlide" aria-label="Pouseer reel">Ⅱ <span>Pouse</span></button><button type="button" id="nextSlide" aria-label="Volgende foto">›</button></div><span class="interval-hint">10 SEKONDES / FOTO</span></div>
+      <div class="player-bottom"><span id="feedStatus" role="status" aria-live="polite">Laai Flip se Google Drive-foto’s ...</span><div class="player-controls"><button type="button" id="prevSlide" aria-label="Vorige foto">‹</button><button type="button" id="pauseSlide" aria-label="Pouseer reel">Ⅱ <span>Pouse</span></button><button type="button" id="nextSlide" aria-label="Volgende foto">›</button></div><span class="interval-hint">10 SEKONDES / FOTO</span></div>
     </div>
+    <div class="reel-share-qr" id="liveReelQr"><a href="https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link" target="_blank" rel="noopener noreferrer"><img src="assets/flip60-foto-album-qr.png" loading="lazy" alt="QR-kode vir Flip se gedeelde Google Drive-foto-album" width="124" height="124"></a><div><span class="film-overline">SKANDEER • DEEL • HERINNER</span><h3>Jou foto’s. Flip se stories.</h3><p>Skandeer om Flip se foto-album te besoek. Foto’s wat by die gedeelde vouer gevoeg word, verskyn met die volgende feed-verversing in die reel.</p><div class="qr-buttons"><button type="button" class="small-outline filled" id="openTvFromQr">▶ Maak die Live Reel oop</button><a class="small-outline" href="?reel=tv" target="_blank" rel="noopener noreferrer">Groot-skerm-skakel ↗</a></div></div></div>
     <div class="share-note"><div><h3>Elke foto vertel ’n storie.</h3><p>Deel jou gunsteling Flip-foto’s en video’s vir die live reel.</p></div><div class="memory-buttons"><a class="button secondary" id="driveFolderLink" href="https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link" target="_blank" rel="noopener noreferrer">Besoek die foto-album ↗</a><a class="button secondary" id="sharePhotoWhatsapp" href="https://wa.me/27723144350" target="_blank" rel="noopener noreferrer">Stuur vir Flip ↗</a></div></div>
   </div>
 </section>
@@ -108,7 +123,7 @@
   <div class="day-grid"><div class="timeline"><div class="time-row"><time datetime="2026-11-20">VR <span>20 NOV</span></time><div><strong>Vrydagaand</strong><span>Eet saam by die Skibootklub.</span></div></div>
     <div class="time-row"><time datetime="2026-11-21">SA <span>21 NOV</span></time><div><strong>Die groot Island Style-viering</strong><span>Ontbyt by die Skibootklub. <b>17:00:</b> Partytjie by die Skibootklub-karavaanpark. <b>18:40:</b> Bokke teen Ierland op die groot skerm.</span></div></div>
     <div class="time-row"><time datetime="2026-11-22">SO <span>22 NOV</span></time><div><strong>Die naweek sluit af</strong><span>Ontbyt by die Skibootklub en middagete-braai. Bykosse word by die Skibootklub bestel.</span></div></div></div>
-    <div class="day-image"><img src="assets/flip-coastal-hero.jpg" alt="Warm see- en strandtoneel vir Flip se Island Style-naweek" loading="lazy"><div class="caption"><span>21 NOVEMBER · 17:00</span><strong>Dis Flip se groot aand.</strong><small>Island Style. Onder die son, saam met die mense wat saakmaak.</small></div></div>
+    <div class="day-image"><img src="assets/flip-1966-vinyl.webp" alt="Kleurryke 1966-strandtoneel met vinielspeler en see vir Flip se Island Style-naweek" loading="lazy"><div class="caption"><span>21 NOVEMBER · 17:00</span><strong>Dis Flip se groot aand.</strong><small>Island Style. Onder die son, saam met die mense wat saakmaak.</small></div></div>
   </div></div></section>
 
 <!-- Detailed access / camping rules. -->
@@ -123,7 +138,14 @@
 </main>
 <footer class="footer"><span>Flip se 60ste · 21 November 2026 · Richardsbaai</span><a href="#top">Terug boontoe ↑</a></footer>
 
-<div class="tv-overlay" id="tvOverlay" role="dialog" aria-modal="true" aria-label="Flip se volskerm foto-reel" hidden><div class="tv-bar"><span>FLIP 60 · LIVE HERINNERINGE</span><div><span id="tvCount"></span><button id="tvPause" type="button" aria-label="Pouseer volskerm-reel">Ⅱ</button><button id="closeTv" type="button" aria-label="Maak volskerm-reel toe">×</button></div></div><div class="tv-view"><button id="tvPrev" type="button" class="tv-adj" aria-label="Vorige foto"><img id="tvPrevImage" src="assets/flip60-belangrike-inligting.jpeg" alt="Vorige foto"></button><div class="tv-main"><img id="tvImage" src="assets/flip60-uitnodiging.jpeg" alt="Hooffoto"><div class="tv-video-placeholder" id="tvVideoPlaceholder" hidden><span>▶</span><p>VIDEO-HERINNERING</p><button type="button" class="tv-video-play" id="tvVideoPlay">▶ Speel hier</button><a href="#" id="tvVideoLink" target="_blank" rel="noopener noreferrer">Of maak in Drive oop ↗</a></div><div class="tv-progress"><div id="tvProgress"></div></div></div><button id="tvNext" type="button" class="tv-adj" aria-label="Volgende foto"><img id="tvNextImage" src="assets/flip60-belangrike-inligting.jpeg" alt="Volgende foto"></button></div><div class="tv-foot">TALENT IS PERMANENT <span>✳</span> DIE LEWE IS ’N LIED</div></div>
+<div class="tv-overlay" id="tvOverlay" role="dialog" aria-modal="true" aria-label="Flip se volskerm Live Memory Reel" hidden>
+  <div class="tv-bar"><span><i class="film-live-dot"></i> FLIP 60 · LIVE MEMORY REEL</span><div><span id="tvCount"></span><button id="tvPause" type="button" aria-label="Pouseer volskerm-reel">Ⅱ</button><button id="closeTv" type="button" aria-label="Maak volskerm-reel toe">×</button></div></div>
+  <div class="tv-layout">
+    <div class="tv-view"><button id="tvPrev" type="button" class="tv-adj" aria-label="Vorige foto"><img id="tvPrevImage" src="assets/flip60-belangrike-inligting.jpeg" alt="Vorige foto"></button><div class="tv-main"><img id="tvImage" src="assets/flip60-uitnodiging.jpeg" alt="Hooffoto"><div class="tv-video-placeholder" id="tvVideoPlaceholder" hidden><span>▶</span><p>VIDEO-HERINNERING</p><button type="button" class="tv-video-play" id="tvVideoPlay">▶ Speel hier</button><a href="#" id="tvVideoLink" target="_blank" rel="noopener noreferrer">Of maak in Drive oop ↗</a></div><div class="tv-progress"><div id="tvProgress"></div></div></div><button id="tvNext" type="button" class="tv-adj" aria-label="Volgende foto"><img id="tvNextImage" src="assets/flip60-belangrike-inligting.jpeg" alt="Volgende foto"></button></div>
+    <aside class="tv-qr"><div class="tv-qr-eyebrow">FLIP SE FOTO-ALBUM</div><a href="https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link" target="_blank" rel="noopener noreferrer" aria-label="Maak Flip se foto-album met die QR-kode oop"><img src="assets/flip60-foto-album-qr.png" alt="QR-kode na Flip se Google Drive foto-album"></a><h3>Skandeer &amp;<br>deel die <em>oomblik.</em></h3><p>Herinneringe wat by die album gevoeg word, kom outomaties in die Live Reel.</p><span class="tv-qr-note">SKANDEER MET JOU FOON</span></aside>
+  </div>
+  <div class="tv-foot">TALENT IS PERMANENT <span>✳</span> DIE LEWE IS ’N LIED <span class="tv-foot-status" id="tvFeedStatus">LIVE ALBUM</span></div>
+</div>
 <noscript><p class="noscript">Skakel JavaScript aan om die live foto- en video-reel te gebruik.</p></noscript>
 </body>
 </html>

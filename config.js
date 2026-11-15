@@ -11,6 +11,6 @@ window.FLIP60_CONFIG = Object.freeze({
   ORGANISER_WHATSAPP: "27723144350", // vehicle permit / sharing photos, NOT RSVP
   REEL_INTERVAL_MS: 10000, // V33: 10s per image, deterministic right-hand handoff
   FEED_REFRESH_MS: 120000, // every two minutes
-  AUTO_HERO_FROM_FEED: true, // replace illustrative hero with first available real Drive photo
+  AUTO_HERO_FROM_FEED: false, // preserve the bespoke 1966 hero; Google Drive still powers the Memory Reel
   HERO_PHOTO_ID: "" // optional: preferred Drive file ID for Flip's hero picture
 });
