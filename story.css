@@ -260,7 +260,8 @@ main{padding:0 0 0}
 .chapters-heading h2{max-width:1180px!important;margin:11px 0 22px!important}
 .hero-visual>img.hero-scene{transition:opacity .55s ease-in-out!important;transform:none!important}
 .hero-visual>img.hero-scene.is-active{transform:none!important}
-.film-frame img{min-height:100%;background:#0d3444}
+.film-frame img{width:100%!important;height:100%!important;min-height:0!important;object-fit:contain!important;object-position:center center!important;display:block;background:#0d3444!important}
+.reel-side img,.tv-adj img{object-fit:contain!important;object-position:center center!important;background:#0d3444!important}
 @media(max-width:700px){.chapters-heading h2{margin:8px 0 18px!important}}
 /* Branded placeholder behind Drive thumbnails until images complete loading. */
 .film-frame{background:#10394d url('assets/story-coast-detail.webp') center/cover no-repeat!important}
