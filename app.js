@@ -6,10 +6,14 @@
   const folderUrl = String(config.DRIVE_FOLDER_URL || 'https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link');
   const phone = String(config.ORGANISER_WHATSAPP || '27723144350').replace(/\D/g, '');
   const $ = id => document.getElementById(id);
+  // These are clearly labeled 1966 theme images, NOT photographs of Flip.
+  // Replaced automatically by the Google Drive media feed when accessible.
   const fallback = [
-    { id:'local-invite', name:'Flip se Island Style-uitnodiging', caption:'Die uitnodiging', type:'image', image:'assets/flip60-uitnodiging.jpeg', original:'assets/flip60-uitnodiging.jpeg' },
-    { id:'local-details', name:'Belangrike inligting', caption:'Belangrike inligting', type:'image', image:'assets/flip60-belangrike-inligting.jpeg', original:'assets/flip60-belangrike-inligting.jpeg' },
-    { id:'local-island', name:'Island Style-kunswerk', caption:'Island Style – temakunswerk', type:'image', image:'assets/flip-coastal-hero.jpg', original:'assets/flip-coastal-hero.jpg' }
+    {id:'theme-1966-kombi',name:'Temakunswerk · Kombi 1966',caption:'TEMAVOORSKOU · WAG VIR FLIP SE FOTO’S',type:'image',image:'assets/flip-1966-kombi.webp',original:'assets/flip-1966-kombi.webp'},
+    {id:'theme-jacarandas',name:'Temakunswerk · Somer 1966',caption:'TEMAVOORSKOU · WAG VIR FLIP SE FOTO’S',type:'image',image:'assets/story-summer-detail.webp',original:'assets/story-summer-detail.webp'},
+    {id:'theme-vinyl',name:'Temakunswerk · Viniel & see',caption:'TEMAVOORSKOU · WAG VIR FLIP SE FOTO’S',type:'image',image:'assets/flip-1966-vinyl.webp',original:'assets/flip-1966-vinyl.webp'},
+    {id:'theme-kombi-detail',name:'Temakunswerk · Die Kombi',caption:'TEMAVOORSKOU · WAG VIR FLIP SE FOTO’S',type:'image',image:'assets/story-kombi-detail.webp',original:'assets/story-kombi-detail.webp'},
+    {id:'theme-vinyl-detail',name:'Temakunswerk · Plaatspeler',caption:'TEMAVOORSKOU · WAG VIR FLIP SE FOTO’S',type:'image',image:'assets/story-vinyl-detail.webp',original:'assets/story-vinyl-detail.webp'}
   ];
   let photos = fallback.slice();
   let currentIndex = 0;
@@ -24,7 +28,7 @@
   let priorFocus = null;
   let currentVideoFrame = null;
   let tvVideoFrame = null;
-  const defaultHeroSrc = document.querySelector('.hero-visual>img')?.getAttribute('src') || 'assets/flip-coastal-hero.jpg';
+  const defaultHeroSrc = document.querySelector('.hero-visual>img')?.getAttribute('src') || 'assets/flip-1966-kombi.webp';
   // Small, windowed moving filmstrip: only nine visible DOM images even for large Drive folders.
   // This is the moving reel omitted from the previous Flip60 version.
   const filmTrack=$('memoryTrack'), filmWindow=$('filmWindow');
@@ -46,8 +50,8 @@
     else if(Math.abs(position-FILM_CENTER)===1)frame.classList.add('is-near');
     frame.setAttribute('aria-label',item.name);
     const img=document.createElement('img');img.src=filmThumbnail(item);img.alt=item.name;
-    img.loading=Math.abs(position-FILM_CENTER)>3?'lazy':'eager';img.decoding='async';
-    img.onerror=()=>{img.onerror=null;img.src='assets/flip-coastal-hero.jpg';};
+    img.loading='eager'; // Only nine DOM frames, avoid empty-looking filmstrip during first scrollimg.decoding='async';
+    img.onerror=()=>{img.onerror=null;img.src='assets/flip-1966-kombi.webp';};
     frame.appendChild(img);
     if(isVideo(item)){const video=document.createElement('span');video.className='film-frame-video';video.textContent='▶ VIDEO';frame.appendChild(video);}
     const caption=document.createElement('div');caption.className='film-frame-caption';caption.textContent=item.caption||item.name;frame.appendChild(caption);
@@ -70,7 +74,7 @@
     const nodes=[];
     for(let k=0;k<FILM_COUNT;k++)nodes.push(makeFilmFrame(at(startIndex+k-FILM_CENTER),k));
     filmTrack.replaceChildren(...nodes);
-    $('filmCount').textContent=isFeedLoaded?`${photos.length} FOTO'S EN VIDEO'S · LAAI OUTOMATIES`:'VOORSKOU · WAG VIR GOOGLE DRIVE';
+    $('filmCount').textContent=isFeedLoaded?`${photos.length} FOTO'S EN VIDEO'S · LAAI OUTOMATIES`:'1966-TEMAVOORSKOU · WAG VIR DRIVE-FOTO’S';
   }
   function resetFilm(){
     if(!filmTrack)return;
@@ -100,12 +104,7 @@
 
 
   function wa(text) { return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`; }
-  const vehicleMessage = 'Hallo Flip! Hier is my voertuigbesonderhede vir die 60ste:\nBestuurder (naam en van): \nVoertuig (maak): \nRegistrasienommer: ';
-  const chatLinks = {
-    sharePhotoWhatsapp: 'Hallo Flip! Ek wil graag fotos of videos vir die Flip60-herinneringe deel.',
-    nonCamperWhatsapp: vehicleMessage,
-    camperWhatsapp: vehicleMessage
-  };
+  const chatLinks = {};
   Object.entries(chatLinks).forEach(([id, message]) => { const a=$(id); if(a) {a.href=wa(message);a.target='_blank';a.rel='noopener noreferrer';} });
   const driveAnchor=$('driveFolderLink'); if(driveAnchor) driveAnchor.href=folderUrl;
   const menuToggle=document.querySelector('.menu-toggle'), mobileNav=$('mobileNav');
@@ -113,10 +112,6 @@
     menuToggle.addEventListener('click',()=>{const open=mobileNav.hidden; mobileNav.hidden=!open;menuToggle.setAttribute('aria-expanded',String(open));menuToggle.setAttribute('aria-label',open?'Maak kieslys toe':'Maak kieslys oop');});
     mobileNav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mobileNav.hidden=true;menuToggle.setAttribute('aria-expanded','false');}));
   }
-  const tabButtons=[$('nonCamperTab'),$('camperTab')], tabPanels=[$('nonCamperPanel'),$('camperPanel')];
-  function setTab(index){tabButtons.forEach((button,i)=>{button.classList.toggle('active',i===index);button.setAttribute('aria-selected',String(i===index));button.tabIndex=i===index?0:-1;tabPanels[i].hidden=i!==index;});}
-  tabButtons.forEach((button,i)=>{button.addEventListener('click',()=>setTab(i));button.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();const next=(i+(e.key==='ArrowRight'?1:-1)+2)%2;setTab(next);tabButtons[next].focus();}});});
-
   // Always keep the next visual on the RIGHT immediately adjacent to the main photo.
   // Changing currentIndex by ONE moves that exact right-hand photo into the centre.
   const wrapIndex=i=>(i%photos.length+photos.length)%photos.length;
@@ -141,13 +136,13 @@
     return { id, name:String(input.name||input.title||`Herinnering ${i+1}`), caption:String(input.caption||input.name||`Herinnering ${i+1}`), type, mimeType:mime,
       image, original:orig, preview:safeHttps(input.previewUrl||input.viewUrl)||orig, video:safeHttps(input.videoUrl||input.streamUrl||''), createdAt:input.createdAt||'' };
   }
-  function currentLabel(){return isFeedLoaded?`${currentIndex+1} / ${photos.length} HERINNERINGE`:'UITNODIGING-VOORSKOU';}
+  function currentLabel(){return isFeedLoaded?`${currentIndex+1} / ${photos.length} HERINNERINGE`:'1966-TEMAVOORSKOU';}
   function updateImage(node,item){
     if(!node||!item)return;
     const nextUrl = new URL(item.image,document.baseURI).href;
     if(node.src!==nextUrl)node.src=item.image;
     node.alt=item.name;
-    node.onerror=()=>{node.onerror=null;node.src='assets/flip-coastal-hero.jpg';};
+    node.onerror=()=>{node.onerror=null;node.src='assets/flip-1966-kombi.webp';};
   }
   function brokenPhoto(container,item){
     const card=document.createElement('div');card.className='reel-error';
@@ -265,7 +260,7 @@
       }
     }
     if(tvVideo){tvVideo.hidden=!isVideo(current);if(isVideo(current))tvVideoLink.href=current.preview||current.original;}
-    const tvCount=$('tvCount');if(tvCount)tvCount.textContent=isFeedLoaded?`${currentIndex+1} / ${photos.length}`:'VOORSKOU';
+    const tvCount=$('tvCount');if(tvCount)tvCount.textContent=isFeedLoaded?`${currentIndex+1} / ${photos.length}`:'TEMAVOORSKOU';
     const tvFeed=$('tvFeedStatus');if(tvFeed)tvFeed.textContent=isFeedLoaded?'GOOGLE DRIVE · LIVE':'WAG VIR DRIVE-FEED';
     preloadNeighbours();
   }

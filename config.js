@@ -5,6 +5,7 @@
  * Google must authorize that deployment; the Drive folder link alone is not an API endpoint.
  */
 window.FLIP60_CONFIG = Object.freeze({
+  AVATAR_VIDEO_URL: "", // Add assets/flip-avatar.mp4 here once Flip’s own video is available
   PHOTO_FEED_URL: "https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec", // Flip60 published Google Apps Script endpoint (2026-11-15)
   DRIVE_FOLDER_ID: "10qytscu6v9hxoqTLKuNcfqvbfkvB31P6",
   DRIVE_FOLDER_URL: "https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link",

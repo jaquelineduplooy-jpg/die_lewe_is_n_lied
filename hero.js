@@ -25,7 +25,7 @@
   function start(){
     if(timer){window.clearInterval(timer);timer=null;}
     if(!prefersReduced.matches){
-      timer=window.setInterval(()=>{if(!document.hidden)show(selected+1);},8000);
+      timer=window.setInterval(()=>{if(!document.hidden)show(selected+1);},12000);
     }
   }
   tabs.forEach((tab,i)=>tab.addEventListener('click',()=>{show(i);start();}));
