@@ -265,3 +265,54 @@ main{padding:0 0 0}
 @media(max-width:700px){.chapters-heading h2{margin:8px 0 18px!important}}
 /* Branded placeholder behind Drive thumbnails until images complete loading. */
 .film-frame{background:#10394d url('assets/story-coast-detail.webp') center/cover no-repeat!important}
+
+/* V7.2 — NO-CROP REEL / PERMANENT CAPTION DOCK
+   All photographs remain visible; captions never obscure the image.
+   Film frames are recycled, not rebuilt, during automatic playback. */
+.film-window{height:244px!important}
+.film-track{top:9px!important;height:204px!important;left:0!important;will-change:transform}
+.film-frame{height:204px!important;width:272px!important;flex:0 0 272px!important;
+ display:flex!important;flex-direction:column!important;overflow:hidden!important;
+ border:5px solid #fff8e7!important;background:#092b45!important;
+ box-sizing:border-box!important;}
+.film-frame.is-center{border-color:var(--sun)!important}
+.film-picture{flex:1 1 auto;min-height:0;min-width:0;display:grid;place-items:center;position:relative;
+ background:#0b3146;overflow:hidden}
+.film-frame .film-picture img{display:block!important;width:100%!important;height:100%!important;
+ min-height:0!important;max-height:100%!important;max-width:100%!important;
+ object-fit:contain!important;object-position:center center!important;
+ background:#0b3146!important;}
+.film-frame .film-picture img[hidden]{display:none!important}
+.film-frame-caption{flex:0 0 32px;display:block;position:relative!important;bottom:auto!important;
+ left:auto!important;right:auto!important;min-height:0!important;height:32px!important;
+ padding:8px 11px!important;margin:0!important;
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+ font-size:.66rem!important;line-height:16px!important;font-weight:850;
+ background:#12374d!important;color:#fff9e8!important;}
+.film-unavailable{display:grid;place-items:center;text-align:center;
+ font-size:.68rem;font-weight:900;letter-spacing:.10em;color:#fff9e8;padding:10px;}
+.film-frame-video{top:8px!important;right:8px!important}
+/* Give the main reel its own image area too: no caption over anyone's face or feet. */
+.reel-media{display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ grid-template-rows:minmax(0,1fr) 34px!important;place-items:stretch!important;}
+.reel-media>img,.reel-media>video{grid-row:1!important;grid-column:1!important;
+ width:100%!important;height:100%!important;min-height:0!important;
+ object-fit:contain!important;object-position:center center!important;}
+.reel-media>.reel-caption{grid-row:2!important;grid-column:1!important;
+ position:relative!important;bottom:auto!important;left:auto!important;
+ max-width:100%!important;width:100%!important;height:34px!important;
+ padding:8px 12px!important;margin:0!important;
+ border:0!important;border-radius:0!important;
+ display:block!important;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;
+ line-height:18px!important;font-size:.66rem!important;background:#12374d!important;}
+/* Side cards and TV neighbours show the full image rather than zooming/cropping. */
+.reel-side img,.tv-adj img{object-fit:contain!important;object-position:center center!important;
+ width:100%!important;height:100%!important;background:#092b45!important;}
+.tv-main>img{object-fit:contain!important;object-position:center center!important;}
+@media(max-width:700px){
+ .film-window{height:199px!important;border-top-width:7px!important;border-bottom-width:7px!important}
+ .film-track{height:174px!important;top:6px!important;gap:10px!important}
+ .film-frame{height:174px!important;width:204px!important;flex:0 0 204px!important;border-width:4px!important}
+ .film-frame-caption{height:30px!important;flex-basis:30px!important;font-size:.59rem!important;line-height:14px!important}
+ .reel-media>.reel-caption{font-size:.58rem!important}
+}

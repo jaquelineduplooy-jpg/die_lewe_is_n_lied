@@ -29,32 +29,52 @@
   let currentVideoFrame = null;
   let tvVideoFrame = null;
   const defaultHeroSrc = document.querySelector('.hero-visual>img')?.getAttribute('src') || 'assets/flip-1966-kombi.webp';
-  // Small, windowed moving filmstrip: only nine visible DOM images even for large Drive folders.
-  // This is the moving reel omitted from the previous Flip60 version.
+  // Still On Fire-style sequential reel, with a stable set of film cells.
+  // Recycle just one image per step instead of rebuilding all nine every 10 seconds.
   const filmTrack=$('memoryTrack'), filmWindow=$('filmWindow');
   const FILM_CENTER=3, FILM_COUNT=9, FILM_SLIDE_MS=890;
   let filmTransitionToken=0, filmAnimationTimeout=null;
   function filmThumbnail(item){
     try{
       const url=new URL(item.image,document.baseURI);
-      if(url.hostname==='drive.google.com'&&url.pathname==='/thumbnail'){
-        url.searchParams.set('sz','w720');
+      if(url.hostname==='drive.google.com' && url.pathname==='/thumbnail'){
+        url.searchParams.set('sz','w960');
         return url.toString();
       }
     }catch(_){}
     return item.image;
   }
   function makeFilmFrame(item,position){
-    const frame=document.createElement('div');frame.className='film-frame';
+    const frame=document.createElement('div');
+    frame.className='film-frame';
+    frame.dataset.itemId=item.id;
     if(position===FILM_CENTER)frame.classList.add('is-center');
     else if(Math.abs(position-FILM_CENTER)===1)frame.classList.add('is-near');
     frame.setAttribute('aria-label',item.name);
-    const img=document.createElement('img');img.src=filmThumbnail(item);img.alt=item.name;
-    img.loading='eager'; // Only nine DOM frames, avoid empty-looking filmstrip during first scrollimg.decoding='async';
-    img.onerror=()=>{img.onerror=null;img.src='assets/flip-1966-kombi.webp';};
-    frame.appendChild(img);
-    if(isVideo(item)){const video=document.createElement('span');video.className='film-frame-video';video.textContent='▶ VIDEO';frame.appendChild(video);}
-    const caption=document.createElement('div');caption.className='film-frame-caption';caption.textContent=item.caption||item.name;frame.appendChild(caption);
+    const picture=document.createElement('div');picture.className='film-picture';
+    const img=document.createElement('img');
+    img.src=filmThumbnail(item);img.alt=item.name;
+    img.loading='eager';img.decoding='async';
+    img.onerror=()=>{
+      img.onerror=null;
+      img.hidden=true;
+      frame.classList.add('film-image-unavailable');
+      const unavailable=document.createElement('span');
+      unavailable.className='film-unavailable';
+      unavailable.textContent='FOTO KON NIE LAAI NIE';
+      picture.appendChild(unavailable);
+    };
+    picture.appendChild(img);
+    if(isVideo(item)){
+      const video=document.createElement('span');
+      video.className='film-frame-video';video.textContent='▶ VIDEO';
+      picture.appendChild(video);
+    }
+    const caption=document.createElement('div');
+    caption.className='film-frame-caption';
+    caption.textContent=item.caption||item.name;
+    caption.title=item.caption||item.name;
+    frame.append(picture,caption);
     return frame;
   }
   function filmMeasurements(){
@@ -66,42 +86,77 @@
   }
   function setFilmPosition(position,animated){
     const sizes=filmMeasurements();if(!sizes||!filmTrack)return;
-    filmTrack.style.transition=animated?`left ${FILM_SLIDE_MS}ms cubic-bezier(.22,.76,.22,1)`:'none';
-    filmTrack.style.left=`${Math.round(sizes.left-position*sizes.step)}px`;
+    const x=Math.round(sizes.left-position*sizes.step);
+    filmTrack.style.transition=animated?`transform ${FILM_SLIDE_MS}ms cubic-bezier(.22,.76,.22,1)`:'none';
+    filmTrack.style.transform=`translate3d(${x}px,0,0)`;
+  }
+  function markFilmCenter(){
+    if(!filmTrack)return;
+    [...filmTrack.children].forEach((child,index)=>{
+      child.classList.toggle('is-center',index===FILM_CENTER);
+      child.classList.toggle('is-near',Math.abs(index-FILM_CENTER)===1);
+    });
+    filmTrack.children[FILM_CENTER]?.setAttribute('data-active-id',at(currentIndex).id);
   }
   function fillFilm(startIndex){
     if(!filmTrack||!photos.length)return;
     const nodes=[];
     for(let k=0;k<FILM_COUNT;k++)nodes.push(makeFilmFrame(at(startIndex+k-FILM_CENTER),k));
     filmTrack.replaceChildren(...nodes);
-    $('filmCount').textContent=isFeedLoaded?`${photos.length} FOTO'S EN VIDEO'S · LAAI OUTOMATIES`:'1966-TEMAVOORSKOU · WAG VIR DRIVE-FOTO’S';
+    const filmCount=$('filmCount');
+    if(filmCount)filmCount.textContent=isFeedLoaded
+      ? `${photos.length} FOTO'S EN VIDEO'S · LAAI OUTOMATIES`
+      : '1966-TEMAVOORSKOU · WAG VIR DRIVE-FOTO’S';
   }
   function resetFilm(){
     if(!filmTrack)return;
     ++filmTransitionToken;
     clearTimeout(filmAnimationTimeout);
-    fillFilm(currentIndex);setFilmPosition(FILM_CENTER,false);
-    filmTrack.querySelector('.film-frame.is-center')?.setAttribute('data-active-id',at(currentIndex).id);
+    filmAnimationTimeout=null;
+    fillFilm(currentIndex);
+    setFilmPosition(FILM_CENTER,false);
+    markFilmCenter();
   }
   function shiftFilm(fromIndex,step){
     if(!filmTrack)return;
-    if(Math.abs(step)!==1||matchMedia('(prefers-reduced-motion: reduce)').matches){resetFilm();return;}
+    const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(Math.abs(step)!==1||reducedMotion){resetFilm();return;}
     const token=++filmTransitionToken;
-    clearTimeout(filmAnimationTimeout);
-    fillFilm(fromIndex);setFilmPosition(FILM_CENTER,false);
-    // Reading the current transform flushes the start position before the slide.
-    void filmTrack.offsetWidth;
+    // A quick double-click may interrupt a transition. Restore a coherent
+    // starting sequence just for this case; normal playback recycles its cells.
+    if(filmAnimationTimeout){
+      clearTimeout(filmAnimationTimeout);
+      filmAnimationTimeout=null;
+      fillFilm(fromIndex);
+      setFilmPosition(FILM_CENTER,false);
+    }
+    if(filmTrack.children.length!==FILM_COUNT){
+      fillFilm(fromIndex);setFilmPosition(FILM_CENTER,false);
+    }
+    // The next photo is the immediately adjacent photo on the right.
     const target=FILM_CENTER+step;
-    // Next photograph is the one immediately to the right and visually slides LEFT into focus.
-    for(const [index,child] of [...filmTrack.children].entries()){
+    [...filmTrack.children].forEach((child,index)=>{
       child.classList.toggle('is-center',index===target);
       child.classList.toggle('is-near',Math.abs(index-target)===1);
-    }
+    });
+    void filmTrack.offsetWidth;
     setFilmPosition(target,true);
-    filmAnimationTimeout=setTimeout(()=>{if(token===filmTransitionToken)resetFilm();},FILM_SLIDE_MS+40);
+    filmAnimationTimeout=setTimeout(()=>{
+      if(token!==filmTransitionToken)return;
+      filmAnimationTimeout=null;
+      // Preserve loaded photographs. Only introduce ONE new cell at the edge.
+      if(step>0){
+        filmTrack.firstElementChild?.remove();
+        filmTrack.appendChild(makeFilmFrame(at(fromIndex+FILM_COUNT-FILM_CENTER),FILM_COUNT-1));
+      }else{
+        filmTrack.lastElementChild?.remove();
+        filmTrack.prepend(makeFilmFrame(at(fromIndex-FILM_CENTER-1),0));
+      }
+      setFilmPosition(FILM_CENTER,false);
+      markFilmCenter();
+    },FILM_SLIDE_MS+30);
   }
   window.addEventListener('resize',()=>{if(filmTrack)resetFilm();},{passive:true});
-
 
   function wa(text) { return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`; }
   const chatLinks = {};
