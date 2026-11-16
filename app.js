@@ -34,6 +34,29 @@
   const filmTrack=$('memoryTrack'), filmWindow=$('filmWindow');
   const FILM_CENTER=3, FILM_COUNT=9, FILM_SLIDE_MS=890;
   let filmTransitionToken=0, filmAnimationTimeout=null;
+  const filmShapeCache=new Map();
+  let filmRecenterQueued=false;
+  // Keep the same full original photo, with a softly blurred copy behind it.
+  // No stretching, cropping or pixel processing of guests' originals.
+  function setPhotoAtmosphere(element,url){
+    if(!element || !url)return;
+    element.style.setProperty('--photo-atmosphere',`url(${JSON.stringify(url)})`);
+  }
+  function shapeForPhoto(width,height){
+    const r=width/height;
+    if(r<0.49)return 'is-tall';
+    if(r<0.88)return 'is-portrait';
+    if(r<1.18)return 'is-square';
+    return 'is-wide';
+  }
+  function queueFilmRecenter(){
+    if(filmRecenterQueued || filmAnimationTimeout)return;
+    filmRecenterQueued=true;
+    requestAnimationFrame(()=>{
+      filmRecenterQueued=false;
+      if(!filmAnimationTimeout) setFilmPosition(FILM_CENTER,false);
+    });
+  }
   function filmThumbnail(item){
     try{
       const url=new URL(item.image,document.baseURI);
@@ -51,10 +74,22 @@
     if(position===FILM_CENTER)frame.classList.add('is-center');
     else if(Math.abs(position-FILM_CENTER)===1)frame.classList.add('is-near');
     frame.setAttribute('aria-label',item.name);
+    if(filmShapeCache.has(item.id))frame.classList.add(filmShapeCache.get(item.id));
     const picture=document.createElement('div');picture.className='film-picture';
+    const thumb=filmThumbnail(item);
+    setPhotoAtmosphere(picture,thumb);
     const img=document.createElement('img');
-    img.src=filmThumbnail(item);img.alt=item.name;
+    img.alt=item.name;
     img.loading='eager';img.decoding='async';
+    img.onload=()=>{
+      if(!img.naturalWidth||!img.naturalHeight)return;
+      const shape=shapeForPhoto(img.naturalWidth,img.naturalHeight);
+      filmShapeCache.set(item.id,shape);
+      frame.classList.remove('is-tall','is-portrait','is-square','is-wide');
+      frame.classList.add(shape);
+      queueFilmRecenter();
+    };
+    img.src=thumb;
     img.onerror=()=>{
       img.onerror=null;
       img.hidden=true;
@@ -77,16 +112,12 @@
     frame.append(picture,caption);
     return frame;
   }
-  function filmMeasurements(){
-    const frame=filmTrack?.querySelector('.film-frame');
-    if(!frame||!filmWindow)return null;
-    const gap=parseFloat(getComputedStyle(filmTrack).gap)||0;
-    const width=frame.getBoundingClientRect().width;
-    return {step:width+gap,left:filmWindow.clientWidth/2-width/2};
-  }
   function setFilmPosition(position,animated){
-    const sizes=filmMeasurements();if(!sizes||!filmTrack)return;
-    const x=Math.round(sizes.left-position*sizes.step);
+    const frame=filmTrack?.children[position];
+    if(!frame || !filmWindow)return;
+    // Card widths vary for portraits: centre each using its real CSS position.
+    const centre=frame.offsetLeft+frame.offsetWidth/2;
+    const x=Math.round(filmWindow.clientWidth/2-centre);
     filmTrack.style.transition=animated?`transform ${FILM_SLIDE_MS}ms cubic-bezier(.22,.76,.22,1)`:'none';
     filmTrack.style.transform=`translate3d(${x}px,0,0)`;
   }
@@ -197,6 +228,8 @@
     const nextUrl = new URL(item.image,document.baseURI).href;
     if(node.src!==nextUrl)node.src=item.image;
     node.alt=item.name;
+    const card=node.closest('.reel-side,.tv-adj,.tv-main');
+    setPhotoAtmosphere(card,item.image);
     node.onerror=()=>{node.onerror=null;node.src='assets/flip-1966-kombi.webp';};
   }
   function brokenPhoto(container,item){
@@ -229,6 +262,7 @@
     const oldVideo=videoNode; videoNode=null;
     if(oldVideo){try{oldVideo.pause();oldVideo.removeAttribute('src');oldVideo.load();}catch(e){}}
     stopEmbeddedVideo();
+    setPhotoAtmosphere(container,item.image);
     container.replaceChildren();
     if(isVideo(item)&&item.video){
       const v=document.createElement('video');

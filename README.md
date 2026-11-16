@@ -1,4 +1,4 @@
-# Flip60 — Flip se Storie (V7.2 — Full-Photo Memory Reel Fix)
+# Flip60 — Flip se Storie (V7.3 — Portrait Filmstrip + Cinematic Live Reel)
 
 A responsive story website inspired by the original *Still On Fire / 31.12* UX, redesigned to follow the song **“Talent is permanent. En die lewe is 'n lied.”**
 
@@ -56,4 +56,13 @@ Reload the site. The placeholder changes into a real video player after metadata
 - Versioned CSS/JS links help avoid the old V7.1 assets lingering in browser caches after redeployment.
 - QA: desktop and mobile browser runs with generated landscape, portrait, square, panoramic and tall-portrait test images; captions do not overlap pictures, adjacent handoff and fullscreen QR pass; timed automatic transition at 10 seconds passes. Google Drive live photo access cannot be confirmed from this offline environment.
 
-**Deployment:** Replace the existing Flip60 website files on the deployment with this entire V7.2 folder (not just the stylesheet). If your online site still displays cropped images afterward, confirm the latest deployment is live and hard-refresh the browser. Don's website is not modified.
+**Deployment:** Replace the existing Flip60 website files on the deployment with this entire V7.3 folder (not just the stylesheet). If your online site still displays cropped images afterward, confirm the latest deployment is live and hard-refresh the browser. Don's website is not modified.
+
+
+## V7.3 portrait reel upgrade
+- Portrait photographs use narrower, portrait-friendly film cells instead of a fixed-width landscape card.
+- The displayed original always remains intact via `object-fit: contain`; a blurred duplicate of the same photo fills any spare surrounding space.
+- Main reel and TV mode use the same atmospheric backdrop; captions remain docked beneath the photos.
+- The moving filmstrip centres using actual cell widths, preserving right-adjacent next-photo handoff.
+- QR, feed URL, 10-second timer, pause, video handling and story page were not deliberately changed.
+- Source photos with black bars burned into the image may still retain those pixels; remove them from the source file for a completely borderless result.

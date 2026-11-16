@@ -316,3 +316,60 @@ main{padding:0 0 0}
  .film-frame-caption{height:30px!important;flex-basis:30px!important;font-size:.59rem!important;line-height:14px!important}
  .reel-media>.reel-caption{font-size:.58rem!important}
 }
+
+
+/* V7.3 — PORTRAIT-FIRST CINEMATIC FRAMING.
+   Match the Still On Fire reel intent: keep originals completely visible, fill
+   unused landscape space with a soft duplicate, NEVER crop the front photo.
+   The media can have baked-in black phone bars; we do not alter source pixels. */
+.film-track{align-items:stretch!important}
+.film-frame{flex:0 0 272px!important;width:272px!important;transition:opacity .45s,border-color .45s!important}
+.film-frame.is-wide{width:272px!important;flex-basis:272px!important}
+.film-frame.is-square{width:211px!important;flex-basis:211px!important}
+.film-frame.is-portrait{width:162px!important;flex-basis:162px!important}
+.film-frame.is-tall{width:132px!important;flex-basis:132px!important}
+.film-picture{isolation:isolate!important;background:#173e4d!important}
+.film-picture::before{content:"";position:absolute;inset:-15px;z-index:0;pointer-events:none;
+  background-image:var(--photo-atmosphere);background-size:cover;background-position:center;
+  filter:blur(14px) saturate(1.08) brightness(.65);transform:scale(1.16)}
+.film-picture::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(5,29,43,.2),transparent 35%,transparent 65%,rgba(5,29,43,.2))}
+.film-frame .film-picture img{position:relative!important;z-index:1!important;
+  width:100%!important;height:100%!important;min-width:0!important;max-width:100%!important;
+  object-fit:contain!important;object-position:center!important;background:transparent!important;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.30))}
+.film-frame .film-picture .film-frame-video{z-index:3!important}
+/* Cinematic backdrop on large Live Reel and its adjacent previews. */
+.reel-media,.reel-side,.tv-main,.tv-adj{isolation:isolate!important}
+.reel-media::before,.reel-side::before,.tv-main::before,.tv-adj::before{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:var(--photo-atmosphere);background-size:cover;background-position:center;
+  filter:blur(26px) brightness(.45) saturate(1.12);transform:scale(1.19)}
+.reel-media::before{grid-row:1!important;grid-column:1!important;position:relative!important;inset:auto!important;
+  min-width:0;min-height:0;filter:blur(25px) brightness(.55) saturate(1.12);transform:scale(1.12)}
+.reel-media>img,.reel-media>video{position:relative!important;z-index:1!important;
+  width:100%!important;height:100%!important;object-fit:contain!important;
+  background:transparent!important;filter:drop-shadow(0 9px 14px rgba(0,0,0,.35))}
+.reel-media>.reel-caption{z-index:5!important}
+.reel-media>.reel-old-ghost{z-index:3!important}
+.reel-side img,.tv-adj img{position:relative!important;z-index:1!important;
+  width:100%!important;height:100%!important;object-fit:contain!important;
+  background:transparent!important;opacity:.88!important;filter:drop-shadow(0 3px 9px rgba(0,0,0,.35))!important}
+.reel-side .tile-arrow{z-index:4!important}
+.tv-main>img{position:relative!important;z-index:1!important;
+  width:100%!important;height:100%!important;object-fit:contain!important;
+  background:transparent!important;filter:drop-shadow(0 10px 26px rgba(0,0,0,.38))}
+.tv-main>.tv-progress,.tv-main>.tv-video-placeholder{z-index:5!important}
+/* Prevent the old solid black background from drawing over the ambient photo. */
+.reel-media{background:#163d52!important}
+.reel-side,.tv-adj{background:#163d52!important}
+.tv-main{background:#12364a!important}
+@media(max-width:700px){
+  .film-frame{width:204px!important;flex-basis:204px!important}
+  .film-frame.is-wide{width:204px!important;flex-basis:204px!important}
+  .film-frame.is-square{width:163px!important;flex-basis:163px!important}
+  .film-frame.is-portrait{width:125px!important;flex-basis:125px!important}
+  .film-frame.is-tall{width:104px!important;flex-basis:104px!important}
+  .reel-media::before{filter:blur(14px) brightness(.52) saturate(1.07)}
+}
+@media(prefers-reduced-motion:reduce){.film-picture::before,.reel-media::before,.tv-main::before{filter:blur(14px) brightness(.50)}}
