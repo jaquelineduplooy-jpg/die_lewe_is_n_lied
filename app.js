@@ -408,7 +408,7 @@
     const overlay=$('tvOverlay'); overlay.hidden=false;document.body.classList.add('tv-open');
     render();$('closeTv').focus();
   }
-  function closeTv(){if(!modalIsOpen)return;modalIsOpen=false;if(tvVideoFrame){tvVideoFrame.remove();tvVideoFrame=null;} $('tvOverlay').hidden=true;document.body.classList.remove('tv-open');if(typeof priorFocus?.focus==='function')priorFocus.focus();}
+  function closeTv(){if(document.body.dataset.liveReelPage==='true'){window.location.href='index.html#herinneringe';return;}if(!modalIsOpen)return;modalIsOpen=false;if(tvVideoFrame){tvVideoFrame.remove();tvVideoFrame=null;} $('tvOverlay').hidden=true;document.body.classList.remove('tv-open');if(typeof priorFocus?.focus==='function')priorFocus.focus();}
   $('openTv')?.addEventListener('click',openTv);$('openTvFromQr')?.addEventListener('click',openTv);$('closeTv')?.addEventListener('click',closeTv);
   document.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&modalIsOpen){closeTv();return;}
@@ -422,7 +422,7 @@
       else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
     }
   });
-  if(new URLSearchParams(window.location.search).get('reel')==='tv'){
+  if(new URLSearchParams(window.location.search).get('reel')==='tv' || document.body.dataset.liveReelPage==='true'){
     // TV link: a clean, full-browser reel — not a separate codebase.
     document.body.classList.add('tv-mode');openTv();
   }

@@ -1,0 +1,28 @@
+/* V10: same proven TV player from app.js, on its own dedicated page. */
+html,body{margin:0;min-height:100%;background:#041f33;color:#fff}
+.tv-loading{padding:4rem;max-width:800px;margin:auto;font:1.1rem/1.5 system-ui,sans-serif;color:#fff3df}
+.tv-loading a{color:#ffd94c}
+body.tv-open .tv-loading{display:none}
+.tv-qr{background:#fff5e3!important;color:#072c43!important}
+.tv-qr-eyebrow,.tv-qr-note{color:#016f78!important}
+.tv-qr h3{color:#072c43!important}
+.tv-qr h3 em{color:#008a92!important}
+.tv-qr p{color:#3d5a65!important}
+.tv-qr a{background:white!important;border:5px solid white!important;border-radius:12px!important}
+.tv-qr a img{width:100%;height:auto;image-rendering:auto;display:block}
+.tv-main img{object-fit:contain!important}
+@media(max-width:700px){.tv-loading{padding:2rem}.tv-qr{max-height:115px!important;padding:7px 12px!important}.tv-qr a{flex:0 0 77px!important;width:77px!important}}
+
+/* High-contrast Still On Fire-style TV presentation: no ambient washout. */
+.tv-layout .tv-qr{background:#fff5e3!important;color:#072c43!important;border:1px solid rgba(255,225,151,.8)!important}
+.tv-main,.tv-adj{background:#06283d!important}
+
+/* V11 — Replace TV QR code with upload-only link; keep TV reel unchanged. */
+.tv-qr.tv-upload{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;gap:15px!important;padding:22px 17px!important}
+.tv-upload-icon{width:76px;height:76px;border-radius:22px;display:grid;place-items:center;background:#00a3a9;color:white;font-size:3.1rem;font-weight:900;box-shadow:0 8px 0 #c1ebe2}
+.tv-upload .tv-qr-eyebrow{font-size:.7rem!important}
+.tv-upload h3{line-height:.96!important;margin:2px 0!important}
+.tv-upload p{font-size:.86rem!important;margin:0!important;line-height:1.5!important}
+.tv-qr.tv-upload a.tv-upload-button{display:flex!important;justify-content:center!important;align-items:center!important;background:#ffdc52!important;color:#072b45!important;border:0!important;border-radius:100px!important;padding:15px 13px!important;text-decoration:none!important;font-size:.8rem!important;font-weight:900!important;letter-spacing:.035em!important;width:100%!important;max-width:240px!important;min-height:50px}
+.tv-upload .tv-qr-note{font-size:.63rem!important;margin:0!important}
+@media(max-width:700px){.tv-qr.tv-upload{min-height:0;max-height:none!important;flex-direction:row!important;align-items:center!important;justify-content:space-between!important;gap:9px!important;padding:8px 10px!important}.tv-upload-icon,.tv-upload p,.tv-upload .tv-qr-eyebrow,.tv-upload .tv-qr-note{display:none!important}.tv-upload h3{font-size:1.05rem!important;flex:1 1 auto!important;min-width:0}.tv-qr.tv-upload a.tv-upload-button{font-size:.68rem!important;min-height:39px!important;flex:0 0 47%!important;padding:8px!important}}

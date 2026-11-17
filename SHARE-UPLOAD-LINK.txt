@@ -1,0 +1,12 @@
+FLIP60 - CLICK & UPLOAD PHOTO LINK
+
+https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec?page=upload&key=-EA69j8zM0v3n7AMDfxw2A
+
+STATUS: This link becomes active ONLY AFTER the Apps Script is updated and redeployed.
+
+WhatsApp message to send AFTER activation:
+
+Flip se herinneringe! 📸 Deel jou foto's hier:
+https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec?page=upload&key=-EA69j8zM0v3n7AMDfxw2A
+
+Klik die skakel, kies jou foto’s, en tik "Laai foto’s op". Dis al!

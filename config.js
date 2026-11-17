@@ -7,6 +7,7 @@
 window.FLIP60_CONFIG = Object.freeze({
   AVATAR_YOUTUBE_ID: "b_pDUOJ1tEs", // Flip Shorts (portrait). Autoplay muted and loop single video.
   PHOTO_FEED_URL: "https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec", // Flip60 published Google Apps Script endpoint (2026-11-15)
+  PHOTO_UPLOAD_URL: "https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec?page=upload&key=-EA69j8zM0v3n7AMDfxw2A", // Active after updating the existing Google Apps Script deployment
   DRIVE_FOLDER_ID: "10qytscu6v9hxoqTLKuNcfqvbfkvB31P6",
   DRIVE_FOLDER_URL: "https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link",
   ORGANISER_WHATSAPP: "27723144350", // vehicle permit / sharing photos, NOT RSVP
