@@ -29,3 +29,7 @@ Each JPEG, PNG, HEIC, HEIF, WebP, GIF or AVIF file must be under 12 MB. The uplo
 - New photos are set to view-only link sharing where Google Drive policy permits so the reel can display them; ensure guests consent to sharing their pictures on the birthday website.
 - Google Apps Script web apps have execution quotas and limitations; the 12 MB limit is a conservative usability setting, not a Google-guaranteed maximum. Large videos are not supported by this uploader.
 - Don’s Still On Fire code and folder are not used or changed.
+
+
+## V12 — Nibble Sip Repeat Live Reel promotion
+The Live Reel sidebar has been replaced by a self-contained Nibble Sip Repeat advertisement pointing to `https://nibblesiprepeat.com/`. The same panel appears in both `live-reel.html` and the optional fullscreen overlay embedded in `index.html`. The new scoped stylesheet is `nsr-promo.css` and artwork is `assets/nsr-secret-weekend.svg`. No photo reel code, Google Drive feed, upload page, timing or controls were modified. The advertisement references the approved Nibble Sip Repeat concept: hidden places, real connections, less scrolling, more connecting, and the Secret List. The website URL should be validated on a live device before distribution.
