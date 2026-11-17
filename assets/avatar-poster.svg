@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 470" role="img" aria-label="Flip se toekomstige videoboodskap">
+<rect width="800" height="470" fill="#05a6a9"/>
+<circle cx="635" cy="100" r="58" fill="#ffda51"/>
+<path d="M0 414c130-85 240-70 360-24s280 55 440-48v128H0Z" fill="#083349" opacity=".35"/>
+<circle cx="400" cy="230" r="83" fill="#fff4df" opacity=".92"/>
+<path d="m381 195 72 35-72 36Z" fill="#0b354a"/>
+<text x="400" y="365" text-anchor="middle" font-family="Georgia,serif" font-size="32" fill="#fff6e7">Flip sê dit self</text>
+</svg>

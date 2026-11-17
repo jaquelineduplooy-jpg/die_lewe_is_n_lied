@@ -1,68 +1,59 @@
-# Flip60 — Flip se Storie (V7.3 — Portrait Filmstrip + Cinematic Live Reel)
+# Flip60 V9 — Flip se YouTube-avatar + V8 Memory Reel
 
-A responsive story website inspired by the original *Still On Fire / 31.12* UX, redesigned to follow the song **“Talent is permanent. En die lewe is 'n lied.”**
+This is a complete **Flip60** story website. It keeps Flip's 1966 hero,
+Afrikaans narrative, Flip’s looping portrait YouTube Short, QR code, and both reels.
 
-## What this is
+## What changed in V9
 
-- An **Afrikaans story page** about Flip: 1966, his mischievous spirit, friendship, facing life's curveballs, and the love that lasts.
-- **No RSVP, invitation, venue/directions, dress code, schedule, or event logistics.**
-- A prominently reserved **avatar/video** area under the hero.
-- Moving Memory Reel + large slideshow + fullscreen TV Reel with permanent Google Drive QR.
-- Photos advance **every 10 seconds**, in source order. The adjacent photo on the right moves into centre; no random shuffle.
-- New Drive media is polled every 2 minutes; video items play via Google's embedded preview when clicked.
-- The official media feed is independent of Don's Still On Fire site.
+- Replaced avatar placeholder with Flip’s YouTube Short (`b_pDUOJ1tEs`).
+- Uses a true 9:16 vertical frame on desktop and mobile, without cropping.
+- Video starts muted (required by browser autoplay rules), loops continuously using playlist+loop=1, and includes a sound button and a link to the source Short.
+- The previous V8 Memory Reel (Drive feed, moving strip, QR, TV player and photo processing) is unchanged.
 
-## Run and deploy
+## What was already changed in V8
 
-This is a static website. Upload the whole folder to Vercel or use a static HTTP server:
+- Removed the buggy V7.3 blur/grid treatment that damaged landscape image layout.
+- Both portrait and landscape photos now use a single, uncropped foreground in the
+  large viewer, plus a quiet ambient background and a *separate caption row*.
+- The moving filmstrip changes width according to each image's real orientation,
+  and retains the original right-photo-becomes-centre, 10-second order.
+- Added an optional **read-only Vercel photo normalizer** (`api/photo.js` and
+  `lib/photo-processing.js`) to trim large, nearly solid black matte bars
+  embedded in WhatsApp-style screenshots. It does **not** crop actual photo
+  content or modify files in Drive.
+- If the normalizer cannot retrieve a public Drive thumbnail, the browser falls
+  back to the original Google Drive image. This gracefully degrades but leaves
+  black bars already embedded in screenshots unchanged.
+- Video playback, pause/resume, fullscreen QR, feed refresh and the existing
+  Google Apps Script source are preserved.
 
-```bash
-python -m http.server 8080
-```
+## Setup
 
-Then visit `http://localhost:8080/` from inside this folder.
+1. Keep the **contents of this folder together** in a Vercel project. The site
+   uses a static `index.html` and a Node serverless route at `/api/photo`.
+2. Deploy the folder to Vercel with the provided `package.json`. Vercel must
+   install the `sharp` dependency for server-side screenshot matte cleanup.
+3. Your existing Flip60 Google Apps Script URL is already in `config.js`.
+4. Use `https://your-site.vercel.app/?reel=tv` to open the fullscreen reel.
+5. Test with a signed-out browser to confirm the real Google Drive thumbnails
+   are publicly accessible to visitors.
 
-The Google Drive feed is configured in `config.js` to:
-`https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec`
+## Important
 
-The album QR points to:
-`https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link`
+- Original Drive photo files are not changed or deleted.
+- The Google Drive folder is separate from Don's Still On Fire website.
+- The original Still On Fire V33 source archive could not be extracted in this
+  session, so this is a repaired Flip60 implementation, **not a byte-for-byte
+  reproduction** of V33.
+- Black matte detection has been tested using simulated WhatsApp images;
+  production Drive-to-Vercel image access still needs verification after deployment.
 
-**Important:** Drive access must be enabled for the guests who will view images. Sharing a folder link alone does not grant anonymous thumbnail access. Use `feed-check.html` to test image accessibility in a signed-out browser. The themed retro images are clearly labeled *temavoorskou* and are only fallback visuals until the live feed loads; they are not photos of Flip.
+## Tests
 
-## Add Flip's video/avatar later
+- `tests/test-image-processor.js` — makes sure normal photos are unchanged and
+  WhatsApp-style black bars are removed without cutting off the image.
+- `tests/browser-test.py` — Chromium-based simulated 94-item feed, testing
+  landscape/portrait/screenshot rendering, 10-second transitions, live viewer,
+  QR, pause, mobile and fullscreen.
 
-Put a real file named `flip-avatar.mp4` in `assets/`, then edit `config.js`:
-
-```js
-AVATAR_VIDEO_URL: "assets/flip-avatar.mp4",
-```
-
-Reload the site. The placeholder changes into a real video player after metadata loads. No video is synthesized or falsely attributed to Flip.
-
-## Notes
-
-- No music is bundled or played. The animated vinyl is purely decorative.
-- `google-apps-script/Code.gs` is provided as a copy of the existing read-only feed script. It is not redeployed by the website ZIP.
-- The connected live endpoint is maintained, but its real Drive response could not be checked in the execution sandbox, which lacks access to Google's servers.
-- No changes have been made to Don's original projects.
-
-## V7.2 No-crop reel repair (16 November 2026)
-- Filmstrip photos now use `object-fit: contain` inside a dedicated image compartment.
-- Captions occupy their **own 30–32px row** below the photo, never covering any faces, feet, or edges.
-- The main Live Reel has the same separated caption row; TV/side preview images use `contain` as well.
-- The moving strip **recycles its current eight cells** and adds only one new cell per 10-second transition; it does not recreate the entire strip on every tick.
-- The handoff always advances the immediately adjacent photo on the right. No shuffle. The Drive feed URL, 2-minute refresh, fullscreen QR, and existing video support are unchanged.
-- Versioned CSS/JS links help avoid the old V7.1 assets lingering in browser caches after redeployment.
-- QA: desktop and mobile browser runs with generated landscape, portrait, square, panoramic and tall-portrait test images; captions do not overlap pictures, adjacent handoff and fullscreen QR pass; timed automatic transition at 10 seconds passes. Google Drive live photo access cannot be confirmed from this offline environment.
-
-**Deployment:** Replace the existing Flip60 website files on the deployment with this entire V7.3 folder (not just the stylesheet). If your online site still displays cropped images afterward, confirm the latest deployment is live and hard-refresh the browser. Don's website is not modified.
-
-
-## V7.3 portrait reel upgrade
-- Portrait photographs use narrower, portrait-friendly film cells instead of a fixed-width landscape card.
-- The displayed original always remains intact via `object-fit: contain`; a blurred duplicate of the same photo fills any spare surrounding space.
-- Main reel and TV mode use the same atmospheric backdrop; captions remain docked beneath the photos.
-- The moving filmstrip centres using actual cell widths, preserving right-adjacent next-photo handoff.
-- QR, feed URL, 10-second timer, pause, video handling and story page were not deliberately changed.
-- Source photos with black bars burned into the image may still retain those pixels; remove them from the source file for a completely borderless result.
+The `tests/` folder is development-only and can be omitted when deploying.

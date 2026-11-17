@@ -34,90 +34,96 @@
   const filmTrack=$('memoryTrack'), filmWindow=$('filmWindow');
   const FILM_CENTER=3, FILM_COUNT=9, FILM_SLIDE_MS=890;
   let filmTransitionToken=0, filmAnimationTimeout=null;
-  const filmShapeCache=new Map();
-  let filmRecenterQueued=false;
-  // Keep the same full original photo, with a softly blurred copy behind it.
-  // No stretching, cropping or pixel processing of guests' originals.
-  function setPhotoAtmosphere(element,url){
-    if(!element || !url)return;
-    element.style.setProperty('--photo-atmosphere',`url(${JSON.stringify(url)})`);
+  // Public Drive image normalizer. If Vercel cannot retrieve a public thumbnail,
+  // each image automatically falls back to the untouched Drive URL.
+  function photoSource(item){
+    const direct=item.image;
+    try {
+      const input=new URL(direct,document.baseURI);
+      if(!(input.hostname==='drive.google.com' && input.pathname==='/thumbnail'))return direct;
+      if(!/^[A-Za-z0-9_-]{12,120}$/.test(item.id))return direct;
+      const base=new URL(document.baseURI);
+      if(!/^https?:$/.test(base.protocol))return direct;
+      const endpoint=new URL('/api/photo',base);
+      endpoint.searchParams.set('id',item.id);
+      const key=input.searchParams.get('resourcekey');
+      if(key)endpoint.searchParams.set('resourcekey',key);
+      return endpoint.href;
+    }catch(_){return direct;}
   }
-  function shapeForPhoto(width,height){
-    const r=width/height;
-    if(r<0.49)return 'is-tall';
-    if(r<0.88)return 'is-portrait';
-    if(r<1.18)return 'is-square';
+  function setPhotoAmbient(element,url){
+    if(element && url)element.style.setProperty('--photo-atmosphere',`url(${JSON.stringify(url)})`);
+  }
+  function attachImage(node,item,onLoad,onUnavailable){
+    const direct=item.image, preferred=photoSource(item);
+    let triedDirect=preferred===direct;
+    node.dataset.itemId=item.id;
+    node.alt=item.name;
+    node.onload=()=>{if(onLoad)onLoad(node);};
+    node.onerror=()=>{
+      if(!triedDirect){triedDirect=true;node.src=direct;return;}
+      node.onerror=null;
+      if(onUnavailable)onUnavailable();else node.src='assets/flip-1966-kombi.webp';
+    };
+    node.src=preferred;
+  }
+  function frameShape(width,height){
+    const ratio=width/height;
+    if(ratio<.50)return 'is-tall';
+    if(ratio<.87)return 'is-portrait';
+    if(ratio<1.20)return 'is-square';
     return 'is-wide';
   }
-  function queueFilmRecenter(){
-    if(filmRecenterQueued || filmAnimationTimeout)return;
-    filmRecenterQueued=true;
+  let recenterQueued=false;
+  function recenterFilmIfIdle(){
+    if(recenterQueued)return;
+    recenterQueued=true;
     requestAnimationFrame(()=>{
-      filmRecenterQueued=false;
-      if(!filmAnimationTimeout) setFilmPosition(FILM_CENTER,false);
+      recenterQueued=false;
+      if(!filmAnimationTimeout)setFilmPosition(FILM_CENTER,false);
     });
   }
-  function filmThumbnail(item){
-    try{
-      const url=new URL(item.image,document.baseURI);
-      if(url.hostname==='drive.google.com' && url.pathname==='/thumbnail'){
-        url.searchParams.set('sz','w960');
-        return url.toString();
-      }
-    }catch(_){}
-    return item.image;
-  }
   function makeFilmFrame(item,position){
-    const frame=document.createElement('div');
-    frame.className='film-frame';
+    const frame=document.createElement('div');frame.className='film-frame';
     frame.dataset.itemId=item.id;
     if(position===FILM_CENTER)frame.classList.add('is-center');
     else if(Math.abs(position-FILM_CENTER)===1)frame.classList.add('is-near');
     frame.setAttribute('aria-label',item.name);
-    if(filmShapeCache.has(item.id))frame.classList.add(filmShapeCache.get(item.id));
     const picture=document.createElement('div');picture.className='film-picture';
-    const thumb=filmThumbnail(item);
-    setPhotoAtmosphere(picture,thumb);
     const img=document.createElement('img');
-    img.alt=item.name;
     img.loading='eager';img.decoding='async';
-    img.onload=()=>{
-      if(!img.naturalWidth||!img.naturalHeight)return;
-      const shape=shapeForPhoto(img.naturalWidth,img.naturalHeight);
-      filmShapeCache.set(item.id,shape);
-      frame.classList.remove('is-tall','is-portrait','is-square','is-wide');
-      frame.classList.add(shape);
-      queueFilmRecenter();
-    };
-    img.src=thumb;
-    img.onerror=()=>{
-      img.onerror=null;
-      img.hidden=true;
-      frame.classList.add('film-image-unavailable');
+    const filmItem={...item,image:item.image.replace(/([?&])sz=w\d+/,'$1sz=w1600')};
+    attachImage(img,filmItem,loaded=>{
+      if(loaded.naturalWidth&&loaded.naturalHeight){
+        frame.classList.remove('is-tall','is-portrait','is-square','is-wide');
+        frame.classList.add(frameShape(loaded.naturalWidth,loaded.naturalHeight));
+        recenterFilmIfIdle();
+      }
+      setPhotoAmbient(picture,loaded.currentSrc);
+    },()=>{
+      img.hidden=true;frame.classList.add('film-image-unavailable');
       const unavailable=document.createElement('span');
       unavailable.className='film-unavailable';
       unavailable.textContent='FOTO KON NIE LAAI NIE';
       picture.appendChild(unavailable);
-    };
+    });
     picture.appendChild(img);
     if(isVideo(item)){
-      const video=document.createElement('span');
-      video.className='film-frame-video';video.textContent='▶ VIDEO';
-      picture.appendChild(video);
+      const badge=document.createElement('span');badge.className='film-frame-video';
+      badge.textContent='▶ VIDEO';picture.appendChild(badge);
     }
-    const caption=document.createElement('div');
-    caption.className='film-frame-caption';
+    const caption=document.createElement('div');caption.className='film-frame-caption';
     caption.textContent=item.caption||item.name;
     caption.title=item.caption||item.name;
     frame.append(picture,caption);
     return frame;
   }
   function setFilmPosition(position,animated){
-    const frame=filmTrack?.children[position];
-    if(!frame || !filmWindow)return;
-    // Card widths vary for portraits: centre each using its real CSS position.
-    const centre=frame.offsetLeft+frame.offsetWidth/2;
-    const x=Math.round(filmWindow.clientWidth/2-centre);
+    if(!filmTrack || !filmWindow)return;
+    const frame=filmTrack.children[position];
+    if(!frame)return;
+    const centeredOn=frame.offsetLeft+frame.offsetWidth/2;
+    const x=Math.round(filmWindow.clientWidth/2-centeredOn);
     filmTrack.style.transition=animated?`transform ${FILM_SLIDE_MS}ms cubic-bezier(.22,.76,.22,1)`:'none';
     filmTrack.style.transform=`translate3d(${x}px,0,0)`;
   }
@@ -225,12 +231,16 @@
   function currentLabel(){return isFeedLoaded?`${currentIndex+1} / ${photos.length} HERINNERINGE`:'1966-TEMAVOORSKOU';}
   function updateImage(node,item){
     if(!node||!item)return;
-    const nextUrl = new URL(item.image,document.baseURI).href;
-    if(node.src!==nextUrl)node.src=item.image;
-    node.alt=item.name;
-    const card=node.closest('.reel-side,.tv-adj,.tv-main');
-    setPhotoAtmosphere(card,item.image);
-    node.onerror=()=>{node.onerror=null;node.src='assets/flip-1966-kombi.webp';};
+    if(node.dataset.itemId===item.id && node.complete && node.naturalWidth)return;
+    attachImage(node,item,loaded=>{
+      const parent=loaded.closest('.reel-side,.tv-adj,.tv-main');
+      setPhotoAmbient(parent,loaded.currentSrc);
+      if(parent?.classList.contains('tv-main')){
+        let backdrop=parent.querySelector('.tv-photo-backdrop');
+        if(!backdrop){backdrop=document.createElement('div');backdrop.className='tv-photo-backdrop';parent.prepend(backdrop);}
+        backdrop.style.backgroundImage=`url(${JSON.stringify(loaded.currentSrc)})`;
+      }
+    });
   }
   function brokenPhoto(container,item){
     const card=document.createElement('div');card.className='reel-error';
@@ -255,49 +265,58 @@
     if(asTv){tvVideoFrame=frame;const placeholder=$('tvVideoPlaceholder');if(placeholder)placeholder.hidden=true;}
     else {currentVideoFrame=frame;const poster=container.querySelector('.video-poster-overlay');if(poster)poster.hidden=true;}
   }
-  function createMainMedia(item, direction=0){
-    const container=$('mainMedia'); if(!container) return;
-    const outgoing=direction!==0 && !isVideo(item) ? container.querySelector('img:not(.reel-old-ghost)') : null;
-    const oldPicture=outgoing && outgoing.complete && outgoing.naturalWidth ? outgoing.currentSrc : '';
-    const oldVideo=videoNode; videoNode=null;
+  function createMainMedia(item,direction=0){
+    const container=$('mainMedia');if(!container)return;
+    const existing=container.querySelector(':scope > img');
+    const oldPicture=direction!==0&&existing?.complete&&existing.naturalWidth?existing.currentSrc:'';
+    const oldVideo=videoNode;videoNode=null;
     if(oldVideo){try{oldVideo.pause();oldVideo.removeAttribute('src');oldVideo.load();}catch(e){}}
     stopEmbeddedVideo();
-    setPhotoAtmosphere(container,item.image);
-    container.replaceChildren();
+    const ambient=document.createElement('div');ambient.className='reel-photo-backdrop';
+    container.replaceChildren(ambient);
+    function animateOnArrival(image){
+      ambient.style.backgroundImage=`url(${JSON.stringify(image.currentSrc)})`;
+      if(direction===0)return;
+      const motion=direction>0?'next':'prev';
+      image.classList.add('reel-arrive-'+motion);
+      const departing=container.querySelector('.reel-old-ghost');
+      if(departing){
+        departing.classList.add('reel-depart-'+motion);
+        window.setTimeout(()=>{departing.remove();},830);
+      }
+    }
     if(isVideo(item)&&item.video){
       const v=document.createElement('video');
-      v.src=item.video;v.poster=item.image;v.autoplay=!paused;v.muted=true;v.playsInline=true;v.loop=false;v.preload='metadata';v.controls=true;
-      v.style.cssText='width:100%;height:100%;object-fit:contain;background:#102f43';
+      v.src=item.video;v.poster=photoSource(item);v.autoplay=!paused;
+      v.muted=true;v.playsInline=true;v.loop=false;v.preload='metadata';v.controls=true;
       v.addEventListener('error',()=>{if(v.parentNode)showVideoPoster(container,item);},{once:true});
       container.appendChild(v);videoNode=v;
       if(!paused)v.play().catch(()=>{});
-    } else if(isVideo(item)){
+    }else if(isVideo(item)){
       showVideoPoster(container,item);
-    } else {
-      const image=document.createElement('img');image.src=item.image;image.alt=item.name;image.loading='eager';image.decoding='async';
-      image.onerror=()=>{if(image.parentNode)brokenPhoto(container,item);};
+    }else{
+      const image=document.createElement('img');image.loading='eager';image.decoding='async';
       container.appendChild(image);
-    }
-    if(direction!==0 && !isVideo(item)){
-      const nextPicture=container.querySelector(':scope > img');
-      if(nextPicture){
-        const motion=direction>0?'next':'prev';
-        nextPicture.classList.add('reel-arrive-'+motion);
-        if(oldPicture){
-          const departing=document.createElement('div');
-          departing.style.backgroundImage=`url(${JSON.stringify(oldPicture)})`;departing.setAttribute('aria-hidden','true');
-          departing.className='reel-old-ghost reel-depart-'+motion;
-          container.appendChild(departing);
-          setTimeout(()=>{if(departing.parentNode)departing.remove();},820);
-        }
+      if(oldPicture){
+        const ghost=document.createElement('div');ghost.className='reel-old-ghost';
+        ghost.style.backgroundImage=`url(${JSON.stringify(oldPicture)})`;
+        ghost.setAttribute('aria-hidden','true');container.appendChild(ghost);
       }
+      attachImage(image,item,animateOnArrival,()=>{
+        container.querySelector('.reel-old-ghost')?.remove();
+        if(image.parentNode)brokenPhoto(container,item);
+      });
     }
-    const caption=document.createElement('div');caption.className='reel-caption';caption.id='mediaCaption';caption.textContent=(isVideo(item)?'▶ VIDEO · ':'')+(item.caption||'Flip se herinneringe');container.appendChild(caption);
+    const caption=document.createElement('div');caption.className='reel-caption';
+    caption.id='mediaCaption';
+    caption.textContent=(isVideo(item)?'▶ VIDEO · ':'')+(item.caption||'Flip se herinneringe');
+    container.appendChild(caption);
   }
   function showVideoPoster(container,item){
     container.replaceChildren();
-    const image=document.createElement('img');image.src=item.image;image.alt=item.name;image.loading='eager';
-    image.onerror=()=>{image.onerror=null;image.src=defaultHeroSrc;};container.appendChild(image);
+    const image=document.createElement('img');image.loading='eager';
+    attachImage(image,item,loaded=>{const ambient=container.querySelector('.reel-photo-backdrop');if(ambient)ambient.style.backgroundImage=`url(${JSON.stringify(loaded.currentSrc)})`;});
+    container.appendChild(image);
     const overlay=document.createElement('div');overlay.className='video-poster-overlay';
     const play=document.createElement('button');play.type='button';play.textContent='▶ Speel video hier';
     play.setAttribute('aria-label','Speel Drive-video: '+item.name);
@@ -307,7 +326,7 @@
   }
   function preloadNeighbours(){
     [at(currentIndex+1),at(currentIndex+2)].forEach(item=>{
-      if(!isVideo(item)) {const img=new Image();img.src=item.image;}
+      if(!isVideo(item)) {const img=new Image();img.src=photoSource(item);}
     });
   }
   function chooseDriveHero(items){

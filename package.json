@@ -1,0 +1,12 @@
+{
+  "name": "flip60-memory-reel",
+  "version": "9.0.0",
+  "private": true,
+  "description": "Flip se storie and separate Google Drive memory reel",
+  "dependencies": {
+    "sharp": "^0.34.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

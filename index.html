@@ -10,14 +10,14 @@
   <meta property="og:title" content="Flip se storie | Talent is permanent">
   <meta property="og:description" content="’n Stoute bliksem. ’n Vrye siel. ’n Pa, broer, neef en vriend. 'n Lewende album van die oomblikke wat Flip, Flip maak.">
   <meta property="og:image" content="assets/social-preview.jpg">
-  <title>Flip se storie · Talent is permanent · V7.3</title>
+  <title>Flip se storie · Talent is permanent · V9</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="legacy.css?v=7.3">
-  <link rel="stylesheet" href="story.css?v=7.3">
-  <script src="config.js?v=7.3" defer></script>
-  <script src="app.js?v=7.3" defer></script>
-  <script src="hero.js?v=7.3" defer></script>
-  <script src="avatar.js?v=7.3" defer></script>
+  <link rel="stylesheet" href="legacy.css?v=9.0">
+  <link rel="stylesheet" href="story.css?v=9.0">
+  <script src="config.js?v=9.0" defer></script>
+  <script src="app.js?v=9.0" defer></script>
+  <script src="hero.js?v=9.0" defer></script>
+  <script src="avatar.js?v=9.0" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Spring na die storie</a>
@@ -49,15 +49,20 @@
   </header>
 
   <section class="avatar-band" id="avatar" aria-labelledby="avatarTitle">
-    <div class="avatar-window" id="avatarWindow">
-      <div class="avatar-art" id="avatarArt" aria-label="Plekhouer vir Flip se toekomstige avatar- of videoboodskap">
-        <svg viewBox="0 0 420 260" aria-hidden="true" focusable="false"><path d="M0 0h420v260H0z" fill="#00a6af"/><circle cx="342" cy="52" r="36" fill="#ffdf53"/><path d="M78 246c6-64 39-91 103-103l50-13 54 16c40 13 67 50 71 100Z" fill="#fff2dc"/><path d="M163 150c-11-12-19-31-18-52 0-42 26-68 63-68 33 0 55 25 54 56-2 20-12 28-23 43-2 13 4 27 13 34-27 20-65 18-89-13z" fill="#fff2dc"/><path d="M164 53c4-38 31-43 60-42 19 1 32 13 45 27 8 10 15 12 30 13 6 1 8 10 4 14-21 18-33 11-57 7-36-8-43-3-82-19" fill="#fff2dc"/><path d="M142 90c-22-4-22-16-20-24 13-5 25-3 39-1" fill="#fff2dc"/><path d="M145 106c-12 9-12 19-4 28 8 8 16 8 25 7" fill="#fff2dc"/></svg>
-        <div class="avatar-art-play" aria-hidden="true">▶</div>
-        <span class="avatar-coming">VIDEO / AVATAR KOM HIER</span>
+    <div class="avatar-media-column">
+      <div class="avatar-window" id="avatarWindow" aria-label="Flip se YouTube Shorts-video in portretformaat">
+        <iframe id="flipAvatarYoutube" title="Flip sê dit self — Talent is permanent, die lewe is ’n lied" src="https://www.youtube-nocookie.com/embed/b_pDUOJ1tEs?autoplay=1&amp;mute=1&amp;playsinline=1&amp;loop=1&amp;playlist=b_pDUOJ1tEs&amp;controls=1&amp;rel=0&amp;enablejsapi=1" loading="eager" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen; web-share" allowfullscreen></iframe>
       </div>
-      <video id="flipAvatarVideo" controls playsinline preload="metadata" hidden poster="assets/avatar-poster.svg" aria-label="Flip se eie videoboodskap"></video>
+      <div class="avatar-player-status" aria-label="Video-instellings"><span class="avatar-loop-dot" aria-hidden="true"></span> FLIP SE VIDEO <span aria-hidden="true">·</span> OP HERHAAL</div>
     </div>
-    <div class="avatar-about"><span class="eyebrow">SY EIE WOORDE · SY EIE STORIE</span><h2 id="avatarTitle">Flip sê dit <em>self.</em></h2><p>Hier kry Flip se eie stem ’n plek. Sy video of avatar sal later hier verskyn — met die woorde wat hierdie storie saambind.</p><span class="avatar-coming-caption">’n Spesiale boodskap is op pad</span></div>
+    <div class="avatar-about">
+      <span class="eyebrow">SY EIE WOORDE · SY EIE STORIE</span>
+      <h2 id="avatarTitle">Flip sê dit <em>self.</em></h2>
+      <p>Sy eie stem. Sy eie woorde. En die lewensleuse wat hierdie storie saambind. Kyk na Flip se boodskap — op herhaal, net soos ’n goeie refrein.</p>
+      <button type="button" id="avatarSoundButton" class="avatar-sound-button" aria-pressed="false"><span aria-hidden="true">🔊</span> Hoor Flip se woorde</button>
+      <a class="avatar-youtube-link" id="avatarYoutubeLink" href="https://youtube.com/shorts/b_pDUOJ1tEs?feature=share" target="_blank" rel="noopener noreferrer">Kyk ook op YouTube ↗</a>
+      <p class="avatar-sound-note" id="avatarSoundNote" role="status" aria-live="polite">Die video herhaal outomaties sonder klank. Tik hierbo om te luister.</p>
+    </div>
     <blockquote class="avatar-quote"><span class="quote-mark">“</span><p>Talent is permanent.<br>Die lewe is ’n lied.</p><span class="quote-mark close">”</span></blockquote>
   </section>
 
