@@ -1,0 +1,30 @@
+/* Flip60 V15: final movie ONLY in the former vinyl-record location.
+   The original 9:16 portrait avatar and the 8-second photo reel are untouched. */
+.record-section .final-film-stage{
+  box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;
+  gap:19px;min-width:0;min-height:530px;padding:clamp(19px,2.5vw,30px)!important;
+  background:var(--purple,#a044bf)!important;
+}
+.final-film-content{min-width:0;width:100%;max-width:650px;margin:auto;display:grid;gap:13px}
+.final-film-kicker{font:900 .67rem/1.4 system-ui,sans-serif;letter-spacing:.17em;color:#ffe4a2;text-transform:uppercase}
+.final-film-content h3{margin:0 0 4px;font:400 clamp(1.65rem,2.4vw,2.65rem)/1.06 Georgia,'Times New Roman',serif;color:#fff;letter-spacing:-.045em}
+.final-film-content h3 em{color:#ffe071;font-weight:400}
+.final-video-player{
+  width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:16px;
+  border:5px solid #ffe3a6;background:#071b2a;
+  box-shadow:0 13px 30px rgba(30,14,59,.29)
+}
+.final-video-player iframe{position:absolute;inset:0;display:block;width:100%;height:100%;border:0}
+.final-video-footnote{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  color:#fff9e1;font:850 .66rem/1.4 system-ui,sans-serif;letter-spacing:.10em}
+.final-video-footnote a{color:#fff;text-decoration:underline;text-underline-offset:4px;font-weight:900}
+.final-video-footnote a:hover,.final-video-footnote a:focus-visible{color:#ffe071}
+.final-film-stage .record-meta,.final-film-stage .record-footer{font-size:.61rem;line-height:1.4;flex-wrap:wrap;gap:6px 12px}
+@media(max-width:700px){
+  .record-section .final-film-stage{min-height:unset!important;gap:18px;padding:24px 18px 25px!important}
+  .final-film-content{gap:12px}
+  .final-film-content h3{font-size:clamp(1.8rem,7.5vw,2.6rem)}
+  .final-video-player{border-width:4px;border-radius:13px}
+  .final-video-footnote{font-size:.61rem;letter-spacing:.06em}
+}
+@media(max-width:380px){.final-film-stage .record-meta,.final-film-stage .record-footer{font-size:.53rem}}

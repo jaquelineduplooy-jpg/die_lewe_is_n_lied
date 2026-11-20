@@ -12,13 +12,14 @@
   <meta property="og:image" content="assets/social-preview.jpg">
   <title>Flip se storie · Talent is permanent</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="legacy.css?v=13.0">
-  <link rel="stylesheet" href="story.css?v=13.0">
-  <link rel="stylesheet" href="nsr-promo.css?v=13.0">
-  <script src="config.js?v=13.0" defer></script>
-  <script src="app.js?v=13.0" defer></script>
-  <script src="hero.js?v=13.0" defer></script>
-  <script src="avatar.js?v=13.0" defer></script>
+  <link rel="stylesheet" href="legacy.css?v=15.0">
+  <link rel="stylesheet" href="story.css?v=15.0">
+  <link rel="stylesheet" href="nsr-promo.css?v=15.0">
+  <link rel="stylesheet" href="final-video.css?v=15.0">
+  <script src="config.js?v=15.0" defer></script>
+  <script src="app.js?v=15.0" defer></script>
+  <script src="hero.js?v=15.0" defer></script>
+  <script src="avatar.js?v=15.0" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Spring na die storie</a>
@@ -90,7 +91,18 @@
 
   <section class="record-section" aria-labelledby="recordTitle">
     <div class="record-copy"><div class="eyebrow">DIE REFREIN VAN SY LEWE</div><h2 id="recordTitle">Liefhê sonder <em>einde.</em></h2><p>’n Pa, ’n broer, ’n man. ’n Neef en ’n vriend wat altyd kan. Dis nie die jare wat ’n mens onthou nie — dis die liefde, vriendskap en stories wat bly.</p><div class="story-tagline">VAN LIEFDE. VAN VRIENDSKAP. VAN BLOED WAT ALTYD SAAKMAAK.</div></div>
-    <div class="record-stage"><div class="record-meta"><span>60 JAAR SE STORIES</span><span>EST. 1966</span></div><div class="turntable"><div class="platter"><div class="vinyl"><div class="vinyl-label"><small>’N LEWE IS ’N LIED</small><strong>FLIP</strong><em>60</em></div></div></div><div class="tonearm"><i></i></div></div><div class="record-footer"><span>TALENT IS PERMANENT</span><span>’N LEWE IS ’N LIED</span></div><p class="no-audio-note">’n Speelse vinielhuldeblyk aan Flip se lied.</p></div>
+    <div class="record-stage final-film-stage" aria-label="Flip se finale video in die plek van die ou vinielplaat">
+      <div class="record-meta"><span>60 JAAR SE STORIES</span><span>EST. 1966</span></div>
+      <div class="final-film-content">
+        <span class="final-film-kicker">FLIP SE FINALE VIDEO · 1966–2026</span>
+        <h3>Talent is permanent.<br><em>Die lewe is ’n lied.</em></h3>
+        <div class="final-video-player">
+          <iframe id="flipFinalYoutube" title="Flip se finale video — Talent is permanent en die lewe is ’n lied" src="https://www.youtube-nocookie.com/embed/Goe1WM8Zf9Q?rel=0&amp;playsinline=1&amp;controls=1" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen; web-share" allowfullscreen></iframe>
+        </div>
+        <div class="final-video-footnote"><span>▶ DIE FINALE VIDEO</span><a href="https://www.youtube.com/watch?v=Goe1WM8Zf9Q" target="_blank" rel="noopener noreferrer">KYK OP YOUTUBE ↗</a></div>
+      </div>
+      <div class="record-footer"><span>TALENT IS PERMANENT</span><span>’N LEWE IS ’N LIED</span></div>
+    </div>
   </section>
 
   <section class="closing-story" id="finale" aria-label="Die mooiste mooi"><span class="closing-star" aria-hidden="true">✳</span><div class="eyebrow">DIE MOOISTE MOOI WAT OORBLY</div><h2>Om vir Flip te ken,<br>is die <em>grootste plesier.</em></h2><p>’n Lewe vol liefde en vriendskap. ’n Mens wat jy altyd wil ken. ’n Storie wat nog lank nie klaar vertel is nie.</p><a href="#herinneringe" class="closing-link">KYK WEER NA DIE HERINNERINGE <span aria-hidden="true">↗</span></a><div class="closing-ribbon">TALENT IS PERMANENT <span>✳</span> DIE LEWE IS ’N LIED</div></section>
@@ -99,20 +111,23 @@
 
 <div class="tv-overlay" id="tvOverlay" role="dialog" aria-modal="true" aria-label="Flip se volskerm Live Memory Reel" hidden>
   <div class="tv-bar"><span><i class="film-live-dot"></i> FLIP 60 · LIVE MEMORY REEL</span><div><span id="tvCount"></span><button id="tvPause" type="button" aria-label="Pouseer volskerm-reel">Ⅱ</button><button id="closeTv" type="button" aria-label="Maak volskerm-reel toe">×</button></div></div>
-  <div class="tv-layout"><div class="tv-view"><button id="tvPrev" type="button" class="tv-adj" aria-label="Vorige foto"><img id="tvPrevImage" src="assets/flip-1966-vinyl.webp" alt="Vorige foto"></button><div class="tv-main"><img id="tvImage" src="assets/flip-1966-kombi.webp" alt="Hooffoto"><div class="tv-video-placeholder" id="tvVideoPlaceholder" hidden><span>▶</span><p>VIDEO-HERINNERING</p><button type="button" class="tv-video-play" id="tvVideoPlay">▶ Speel hier</button><a href="#" id="tvVideoLink" target="_blank" rel="noopener noreferrer">Of maak in Drive oop ↗</a></div><div class="tv-progress"><div id="tvProgress"></div></div></div><button id="tvNext" type="button" class="tv-adj" aria-label="Volgende foto"><img id="tvNextImage" src="assets/flip-1966-vinyl.webp" alt="Volgende foto"></button></div><aside class="tv-qr nsr-ad" id="nsrPromo" aria-label="Nibble Sip Repeat — secret weekends and real connections">
+  <div class="tv-layout"><div class="tv-view"><button id="tvPrev" type="button" class="tv-adj" aria-label="Vorige foto"><img id="tvPrevImage" src="assets/flip-1966-vinyl.webp" alt="Vorige foto"></button><div class="tv-main"><img id="tvImage" src="assets/flip-1966-kombi.webp" alt="Hooffoto"><div class="tv-video-placeholder" id="tvVideoPlaceholder" hidden><span>▶</span><p>VIDEO-HERINNERING</p><button type="button" class="tv-video-play" id="tvVideoPlay">▶ Speel hier</button><a href="#" id="tvVideoLink" target="_blank" rel="noopener noreferrer">Of maak in Drive oop ↗</a></div><div class="tv-progress"><div id="tvProgress"></div></div></div><button id="tvNext" type="button" class="tv-adj" aria-label="Volgende foto"><img id="tvNextImage" src="assets/flip-1966-vinyl.webp" alt="Volgende foto"></button></div><aside class="tv-qr nsr-ad" id="nsrPromo" aria-label="Nibble Sip Repeat — discover secret South African weekends">
   <div class="nsr-ad-header">
-    <span class="nsr-ad-eyebrow"><span class="nsr-ad-spark" aria-hidden="true">✦</span> A LITTLE SECRET FOR YOUR NEXT WEEKEND</span>
-    <div class="nsr-wordmark" aria-label="nibble sip repeat"><span>nibble</span><span class="nsr-wordmark-infinity" aria-hidden="true">∞</span><span>sip</span><span class="nsr-wordmark-dot" aria-hidden="true">·</span><span>repeat</span></div>
+    <span class="nsr-ad-eyebrow"><span aria-hidden="true" class="nsr-ad-spark">✦</span> A LITTLE SECRET FOR YOUR NEXT WEEKEND</span>
+    <div class="nsr-wordmark" aria-label="nibble sip repeat">
+      <span class="nsr-wordmark-first"><em>nibble</em><span class="nsr-wordmark-infinity" aria-hidden="true">∞</span><strong>sip</strong><span class="nsr-wordmark-dot" aria-hidden="true">·</span></span>
+      <span class="nsr-wordmark-repeat">repeat</span>
+    </div>
   </div>
-  <div class="nsr-sunset-art" aria-hidden="true"><img src="assets/nsr-secret-weekend.svg" alt=""></div>
+  <div class="nsr-experience-art"><img src="assets/nsr-people-secret-weekend.webp" alt="Friends sharing an extraordinary South African sunset meal, surrounded by mountains" loading="eager" decoding="async"></div>
   <div class="nsr-ad-story">
     <span class="nsr-ad-overline">HIDDEN PLACES. REAL CONNECTIONS.</span>
-    <h3>The secret isn’t the place.<br><em>It’s what happens when you get there.</em></h3>
-    <p>Places you never knew existed. Extraordinary weekends. People worth meeting.</p>
+    <h3><span>The secret isn’t the place.</span><em>It’s what happens when you get there.</em></h3>
+    <p>Unique places across South Africa. Extraordinary weekends. People worth meeting.</p>
   </div>
   <div class="nsr-ad-actions">
-    <span class="nsr-ad-mantra">LESS SCROLLING. MORE CONNECTING.</span>
-    <a class="nsr-ad-cta" href="https://nibblesiprepeat.com/" target="_blank" rel="noopener noreferrer" aria-label="Explore Nibble Sip Repeat and join the Secret List">JOIN THE SECRET LIST <span aria-hidden="true">↗</span></a>
+    <div class="nsr-horizon" aria-hidden="true"></div>
+    <a class="nsr-ad-cta" href="https://nibblesiprepeat.com/" target="_blank" rel="noopener noreferrer" aria-label="Visit Nibble Sip Repeat and join the Secret List">JOIN THE SECRET LIST <span aria-hidden="true">↗</span></a>
     <span class="nsr-ad-url">nibblesiprepeat.com</span>
   </div>
 </aside></div>

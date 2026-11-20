@@ -1,8 +1,8 @@
 {
   "name": "flip60-memory-reel",
-  "version": "13.0.0",
+  "version": "15.0.0",
   "private": true,
-  "description": "Flip60 story page, 8-second moving photo memories, and separate fullscreen Live Reel",
+  "description": "Flip60: preserved portrait avatar, new final film in former vinyl area, photo-led Nibble Sip Repeat promo, 8-second ordered live reel",
   "dependencies": {
     "sharp": "^0.34.1"
   },

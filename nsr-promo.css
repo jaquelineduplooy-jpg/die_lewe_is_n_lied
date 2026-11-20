@@ -1,70 +1,92 @@
-/* Nibble Sip Repeat — Flip60 Live Reel advertising takeover (V12).
-   Scoped strictly to the NSR promo. Flip's photo layout, uploader, and controls remain untouched. */
+/* V14 Nibble Sip Repeat — live typography + original approved photography.
+   Exact supplied art was reworked into a responsive, accessible advertisement.
+   This stylesheet is scoped to the advert and Live Reel layout only.
+*/
+.tv-layout:has(.nsr-ad){grid-template-columns:minmax(0,1fr) clamp(255px,24vw,355px)!important;gap:12px!important}
 .tv-layout .tv-qr.nsr-ad{
-  --nsr-ink:#251e29;--nsr-berry:#472b3d;--nsr-coral:#ed7057;--nsr-mango:#ffc884;--nsr-cream:#fff1df;
-  display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:space-between!important;
-  text-align:left!important;gap:12px!important;overflow:hidden!important;min-width:0!important;
-  width:100%!important;height:100%!important;box-sizing:border-box!important;
-  border:1px solid rgba(255,189,131,.6)!important;border-radius:20px!important;
-  padding:clamp(13px,1.25vw,22px)!important;
-  color:var(--nsr-ink)!important;
-  background:linear-gradient(180deg,#fff4e4 0%,#fff0e0 59%,#ffdabf 100%)!important;
-  position:relative;isolation:isolate;
+  --nsr-ink:#261d2a;
+  --nsr-terracotta:#cb594b;
+  --nsr-maroon:#432737;
+  --nsr-cream:#ffeedc;
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;
+  box-sizing:border-box!important;position:relative;isolation:isolate;overflow:hidden!important;
+  width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;
+  padding:clamp(13px,1.45vw,23px)!important;gap:0!important;
+  color:var(--nsr-ink)!important;background:#fff0de!important;
+  border:1px solid #f3d6bd!important;border-radius:clamp(16px,1.7vw,26px)!important;text-align:left!important;
 }
-.nsr-ad::before{content:'';position:absolute;top:-70px;right:-85px;width:160px;height:160px;border:1px solid rgba(226,113,81,.23);border-radius:50%;pointer-events:none}
-.nsr-ad-header,.nsr-ad-story,.nsr-ad-actions{position:relative;z-index:1}
-.nsr-ad-eyebrow{display:block;color:#9b4a42;font:800 clamp(.47rem,.53vw,.64rem)/1.4 system-ui,sans-serif;letter-spacing:.12em!important}
-.nsr-ad-spark{font-size:.9rem;color:#d76655;vertical-align:middle;margin-right:3px}
-.nsr-wordmark{font-family:Georgia,'Times New Roman',serif;color:var(--nsr-ink);font-size:clamp(1.32rem,1.55vw,1.88rem);letter-spacing:-.075em;line-height:1.06;display:flex;align-items:baseline;flex-wrap:wrap;gap:0 2px;margin-top:12px}
-.nsr-wordmark>span:first-child{font-style:italic}
-.nsr-wordmark>span:last-child{font-weight:600}
-.nsr-wordmark-infinity{color:#d96f52;font-size:1.1em;line-height:0;margin:0 1px}
-.nsr-wordmark-dot{color:var(--nsr-coral)}
-.nsr-sunset-art{position:relative;isolation:isolate;flex:1 1 190px;min-height:105px;max-height:290px;border-radius:130px 130px 14px 14px;overflow:hidden;background:#e4ad89;box-shadow:0 9px 18px rgba(70,34,40,.13)}
-.nsr-sunset-art img{display:block;width:100%;height:100%;object-fit:cover;object-position:center center}
-.nsr-ad-overline{font:850 clamp(.52rem,.6vw,.7rem)/1.4 system-ui,sans-serif!important;letter-spacing:.12em!important;color:#b65f4b!important}
-.tv-layout .tv-qr.nsr-ad h3{color:#2b2531!important;font:normal clamp(1.35rem,1.85vw,2.15rem)/1.04 Georgia,'Times New Roman',serif!important;letter-spacing:-.04em;margin:7px 0 0!important;overflow-wrap:normal}
-.tv-layout .tv-qr.nsr-ad h3 em{color:#c95d4c!important;font-style:italic;display:block;margin-top:6px}
-.tv-layout .tv-qr.nsr-ad p{color:#51404b!important;font:normal clamp(.69rem,.75vw,.87rem)/1.42 system-ui,sans-serif!important;margin:10px 0 0!important}
-.nsr-ad-actions{display:grid;gap:10px}
-.nsr-ad-mantra{font:850 clamp(.5rem,.58vw,.66rem)/1.3 system-ui,sans-serif;letter-spacing:.11em;color:#8e514b}
-.tv-layout .tv-qr.nsr-ad a.nsr-ad-cta{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:6px!important;box-sizing:border-box!important;width:100%!important;min-width:0!important;margin:0!important;
-  padding:13px 13px!important;border:0!important;border-radius:999px!important;
-  color:#fff!important;background:var(--nsr-berry)!important;text-decoration:none!important;box-shadow:0 6px 0 rgba(197,99,75,.18)!important;
-  font:850 clamp(.61rem,.66vw,.8rem)/1.2 system-ui,sans-serif!important;letter-spacing:.055em!important}
-.tv-layout .tv-qr.nsr-ad a.nsr-ad-cta:hover,.tv-layout .tv-qr.nsr-ad a.nsr-ad-cta:focus-visible{background:#b94f45!important;transform:translateY(-1px)}
-.nsr-ad-cta span{font-size:1.35em;line-height:.8}
-.nsr-ad-url{font:750 .72rem/1.25 system-ui,sans-serif;color:#7c4a48;text-align:center;letter-spacing:.025em}
-@media(max-width:1120px) and (min-width:701px){
-  .tv-layout .tv-qr.nsr-ad{gap:9px!important;padding:12px 10px!important;border-radius:14px!important}
-  .nsr-wordmark{font-size:1.22rem}.nsr-ad-eyebrow{font-size:.49rem;letter-spacing:.07em!important}
-  .nsr-sunset-art{max-height:200px;min-height:80px}
-  .tv-layout .tv-qr.nsr-ad h3{font-size:1.23rem!important}
-  .tv-layout .tv-qr.nsr-ad p{font-size:.68rem!important;margin-top:5px!important}
-  .nsr-ad-actions{gap:7px}.nsr-ad-mantra{font-size:.47rem;letter-spacing:.065em}
-  .tv-layout .tv-qr.nsr-ad a.nsr-ad-cta{font-size:.55rem!important;padding:10px 7px!important}
-  .nsr-ad-url{font-size:.59rem}
+.nsr-ad-header,.nsr-ad-story,.nsr-ad-actions{position:relative;z-index:1;min-width:0}
+.nsr-ad-eyebrow{display:block;color:#a6473f!important;font:850 clamp(.53rem,.68vw,.73rem)/1.43 system-ui,-apple-system,BlinkMacSystemFont,sans-serif!important;letter-spacing:.13em!important}
+.nsr-ad-spark{font-size:1.26em;vertical-align:middle;color:#d56b4f;margin-right:5px}
+.nsr-wordmark{font-family:Georgia,'Times New Roman',serif;letter-spacing:-.075em;color:var(--nsr-ink);font-size:clamp(1.8rem,2.6vw,3.35rem);font-weight:600;line-height:.93;margin-top:clamp(14px,1.7vw,25px)}
+.nsr-wordmark-first{display:block;white-space:nowrap}
+.nsr-wordmark-first em{font-weight:400;font-style:italic}
+.nsr-wordmark-first strong{font-weight:600}
+.nsr-wordmark-infinity{font-size:1.09em;line-height:0;color:#d56b50;letter-spacing:-.08em;margin:0 1px}
+.nsr-wordmark-dot{font-size:.55em;color:#d56b50;margin-left:4px}
+.nsr-wordmark-repeat{display:block;font-weight:600;line-height:1.06}
+.nsr-experience-art{flex:1 1 225px;min-height:120px;max-height:46%;position:relative;isolation:isolate;overflow:hidden;margin:clamp(10px,1.65vw,21px) -4px clamp(10px,1.2vw,17px);border-radius:44% 44% 14px 14px / 12% 12% 14px 14px;background:#dcaa87}
+.nsr-experience-art img{display:block;width:100%!important;height:100%!important;max-width:none;object-fit:cover!important;object-position:center 51%!important}
+.nsr-ad-story{flex:0 1 auto}
+.nsr-ad-overline{display:block;color:#be584a!important;font:850 clamp(.57rem,.75vw,.78rem)/1.4 system-ui,sans-serif!important;letter-spacing:.12em!important;margin-bottom:clamp(6px,.8vw,12px)}
+.tv-layout .tv-qr.nsr-ad h3{margin:0!important;font:normal clamp(1.42rem,2vw,2.18rem)/1.02 Georgia,'Times New Roman',serif!important;color:var(--nsr-ink)!important;letter-spacing:-.046em!important;max-width:100%;overflow-wrap:normal}
+.tv-layout .tv-qr.nsr-ad h3 span{display:block}
+.tv-layout .tv-qr.nsr-ad h3 em{display:block;font-style:italic;color:var(--nsr-terracotta)!important;margin-top:6px;line-height:1.04!important}
+.tv-layout .tv-qr.nsr-ad p{font:400 clamp(.67rem,.77vw,.91rem)/1.43 system-ui,sans-serif!important;color:#503f48!important;margin:clamp(7px,1.1vw,14px) 0 0!important}
+.nsr-ad-actions{margin-top:auto;display:grid;gap:6px;flex:0 0 auto}
+
+.tv-layout .tv-qr.nsr-ad a.nsr-ad-cta{display:flex!important;justify-content:space-between!important;align-items:center!important;box-sizing:border-box!important;gap:8px!important;min-width:0!important;width:100%!important;max-width:100%!important;margin:0!important;padding:clamp(10px,.9vw,15px) clamp(11px,1.2vw,20px)!important;border:0!important;border-radius:100px!important;background:var(--nsr-maroon)!important;color:#fff8ef!important;text-decoration:none!important;box-shadow:0 6px 0 rgba(200,103,78,.24)!important;font:850 clamp(.7rem,.86vw,.95rem)/1.25 system-ui,sans-serif!important;letter-spacing:.045em!important;transition:transform .18s ease,background .18s ease}
+.tv-layout .tv-qr.nsr-ad a.nsr-ad-cta:hover,.tv-layout .tv-qr.nsr-ad a.nsr-ad-cta:focus-visible{background:#9d473f!important;transform:translateY(-1px);outline-offset:3px}
+.nsr-ad-cta span{font-size:1.5em;line-height:.8}
+.nsr-ad-url{font:800 clamp(.62rem,.75vw,.84rem)/1.3 system-ui,sans-serif;color:#5c3a43;text-align:center;letter-spacing:.015em;margin-top:3px}
+@media(max-width:1090px) and (min-width:701px){
+  .tv-layout:has(.nsr-ad){grid-template-columns:minmax(0,1fr) clamp(205px,23vw,250px)!important;gap:8px!important}
+  .tv-layout .tv-qr.nsr-ad{padding:12px!important}
+  .nsr-wordmark{font-size:clamp(1.7rem,2.7vw,2.1rem);margin-top:9px}
+  .nsr-ad-eyebrow{font-size:.53rem;letter-spacing:.075em!important}
+  .nsr-experience-art{margin:10px -2px 12px;max-height:39%;min-height:90px}
+  .tv-layout .tv-qr.nsr-ad h3{font-size:clamp(1.32rem,2.2vw,1.58rem)!important}
+  .tv-layout .tv-qr.nsr-ad p{font-size:.7rem!important;line-height:1.35!important}
+  .nsr-ad-overline{font-size:.57rem!important;letter-spacing:.06em!important}
+  .nsr-horizon{height:23px}
+  .tv-layout .tv-qr.nsr-ad a.nsr-ad-cta{font-size:.65rem!important;padding:11px 10px!important}
+  .nsr-ad-url{font-size:.65rem}
 }
-/* On a phone the Live Reel has a shallow band beneath the photos. Use a tidy banner, not a squashed poster. */
-@media(max-width:700px){
-  .tv-layout{grid-template-rows:minmax(0,1fr) auto!important}
-  .tv-layout .tv-qr.nsr-ad{
-    display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto!important;
-    align-items:center!important;gap:5px 10px!important;min-height:82px!important;max-height:118px!important;height:auto!important;
-    padding:10px 11px!important;text-align:left!important;border-radius:12px!important}
-  .nsr-ad-header{grid-column:1;grid-row:1}.nsr-ad-eyebrow{display:none}.nsr-wordmark{margin:0!important;font-size:1.1rem!important;line-height:1.05}
-  .nsr-sunset-art{display:none!important}
-  .nsr-ad-story{grid-column:1;grid-row:2;align-self:start}
-  .nsr-ad-overline,.nsr-ad-story p{display:none!important}
-  .tv-layout .tv-qr.nsr-ad h3{font-size:.76rem!important;line-height:1.1!important;margin:0!important;letter-spacing:-.01em!important}
-  .tv-layout .tv-qr.nsr-ad h3 em{display:inline!important;margin:0!important}
-  .nsr-ad-actions{grid-column:2;grid-row:1/3;align-items:center;gap:0!important}
-  .nsr-ad-mantra,.nsr-ad-url{display:none!important}
-  .tv-layout .tv-qr.nsr-ad a.nsr-ad-cta{width:auto!important;max-width:128px!important;min-width:104px!important;min-height:43px!important;padding:9px 10px!important;font-size:.55rem!important;text-align:left}
-}
-@media (max-height:680px) and (min-width:701px){
-  .tv-layout .tv-qr.nsr-ad{gap:7px!important;padding:12px!important}
-  .nsr-sunset-art{max-height:120px;min-height:50px}
-  .tv-layout .tv-qr.nsr-ad h3{font-size:1.3rem!important;margin:3px 0 0!important}
+@media(max-height:690px) and (min-width:701px){
+  .tv-layout .tv-qr.nsr-ad{padding:9px 12px!important}
+  .nsr-wordmark{font-size:1.75rem;margin-top:7px}
+  .nsr-experience-art{min-height:66px;max-height:32%;margin:7px 0}
+  .tv-layout .tv-qr.nsr-ad h3{font-size:1.28rem!important;line-height:1.01!important}
   .tv-layout .tv-qr.nsr-ad p{display:none!important}
+  .nsr-horizon{display:none}
 }
+/* A television is for photos: on phones this ad becomes a short, clearly branded ribbon. */
+@media(max-width:700px){
+  .tv-layout:has(.nsr-ad){grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr) auto!important;gap:5px!important}
+  .tv-layout .tv-qr.nsr-ad{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto!important;min-height:78px!important;max-height:104px!important;height:auto!important;padding:9px 12px!important;align-items:center!important;gap:4px 12px!important;border-radius:12px!important}
+  .nsr-ad-header{grid-area:1/1/2/2}.nsr-ad-eyebrow{display:none!important}.nsr-wordmark{font-size:1.1rem!important;line-height:1;margin:0!important}
+  .nsr-wordmark-first,.nsr-wordmark-repeat{display:inline!important;white-space:nowrap}
+  .nsr-wordmark-repeat{margin-left:4px}
+  .nsr-experience-art,.nsr-horizon{display:none!important}
+  .nsr-ad-story{grid-area:2/1/3/2;align-self:start}
+  .nsr-ad-overline,.nsr-ad-story p{display:none!important}
+  .tv-layout .tv-qr.nsr-ad h3{font-size:.66rem!important;line-height:1.08!important;letter-spacing:0!important}
+  .tv-layout .tv-qr.nsr-ad h3 span{display:inline}
+  .tv-layout .tv-qr.nsr-ad h3 em{display:inline!important;margin:0 0 0 3px!important}
+  .nsr-ad-actions{grid-area:1/2/3/3;margin:0;align-self:center}
+  .tv-layout .tv-qr.nsr-ad a.nsr-ad-cta{min-width:118px!important;max-width:150px!important;font-size:.58rem!important;min-height:42px!important;padding:9px 11px!important}
+  .nsr-ad-url{display:none!important}
+}
+@media(max-width:370px){
+  .nsr-wordmark{font-size:.94rem!important}
+  .tv-layout .tv-qr.nsr-ad h3{font-size:.57rem!important}
+  .tv-layout .tv-qr.nsr-ad a.nsr-ad-cta{font-size:.53rem!important;min-width:106px!important;max-width:106px!important;padding:8px!important}
+}
+
+/* V14 final polish: clean advert footer, no screenshot-derived text overlays. */
+.tv-layout .tv-qr.nsr-ad{box-shadow:inset 0 0 0 1px rgba(223,174,142,.15)}
+.nsr-ad-actions{padding-top:clamp(9px,1.1vw,16px)}
+.nsr-ad-actions::before{content:"";display:block;width:36%;height:2px;background:#dda85b;margin:0 0 5px}
+.nsr-experience-art{background-color:#dab08e}
+@media(max-height:720px) and (min-width:701px){.nsr-experience-art{min-height:100px;max-height:35%}.nsr-ad-actions{padding-top:5px}}
+@media(max-width:700px){.nsr-ad-actions{padding-top:0}.nsr-ad-actions::before{display:none}}

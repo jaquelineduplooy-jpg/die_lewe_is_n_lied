@@ -1,3 +1,11 @@
+# Flip60 V15 FINAL — Two Videos + Nibble Sip Repeat
+
+The portrait avatar and the final film are TWO SEPARATE videos: `b_pDUOJ1tEs` remains in **Flip sê dit self**; `Goe1WM8Zf9Q` replaces ONLY the vinyl/CD player in the purple **Liefhê sonder einde** panel.
+
+Nibble Sip Repeat's photo-led promotional panel is in the separate `live-reel.html` page (and fullscreen reel). Flip's 8-second memory filmstrip, Google Drive configuration, upload link and the rest of the design are preserved.
+
+Deploy this extracted folder as a *new Flip60 Vercel project*. The `package.json` includes the `sharp` dependency for `/api/photo` image processing. Check both YouTube embeds, the Drive feed and public uploads on the deployed URL.
+
 # Flip60 V13 — final pre-launch website
 
 **Purpose:** Flip se storie, portrait video avatar, moving memory strip, and separate fullscreen Live Reel. This is a story page, not a birthday invitation.
@@ -32,3 +40,16 @@ Photo feed URL is in `config.js`. The Google Drive folder is the user's separate
 ## Source limitation
 
 The public Still On Fire website and original V33 source code could not be retrieved from this environment. V13 preserves the previously established sequential adjacent-photo movement and simplifies presentation; it is not a byte-for-byte copy of V33.
+
+## V14 — Nibble Sip Repeat editorial advert
+
+- The Nibble Sip Repeat promo in both Live Reel entry points uses the approved photographic concept and warm cream, terracotta, plum, and gold palette.
+- The design is responsive; the mobile player uses a slim wordmark and CTA banner.
+- The artwork is a crop of the user-approved image; original Flip photo feed, 8-second interval, avatar and upload flow are untouched.
+- The JOIN THE SECRET LIST link goes to https://nibblesiprepeat.com/ (site root).
+
+## V14 — Final video + approved Nibble Sip Repeat advert
+
+- Final YouTube video: https://www.youtube.com/watch?v=Goe1WM8Zf9Q in the `Flip se` video section, 16:9; loops muted with optional audio.
+- Live Reel advert uses approved people-at-sunset photograph and brand styling; links to https://nibblesiprepeat.com/.
+- No changes to photo feed, reel logic, upload form, 8-second interval, or story chapters. See LAUNCH-REVIEW-V14.md for prelaunch caveats.
