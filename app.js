@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const config = window.FLIP60_CONFIG || {};
-  const INTERVAL = Math.max(3000, Number(config.REEL_INTERVAL_MS) || 10000);
+  const INTERVAL = Math.max(3000, Number(config.REEL_INTERVAL_MS) || 8000);
   const photoFeedUrl = String(config.PHOTO_FEED_URL || '').trim();
   const folderUrl = String(config.DRIVE_FOLDER_URL || 'https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link');
   const phone = String(config.ORGANISER_WHATSAPP || '27723144350').replace(/\D/g, '');
@@ -30,9 +30,9 @@
   let tvVideoFrame = null;
   const defaultHeroSrc = document.querySelector('.hero-visual>img')?.getAttribute('src') || 'assets/flip-1966-kombi.webp';
   // Still On Fire-style sequential reel, with a stable set of film cells.
-  // Recycle just one image per step instead of rebuilding all nine every 10 seconds.
+  // Recycle just one image per step instead of rebuilding all nine every 8 seconds.
   const filmTrack=$('memoryTrack'), filmWindow=$('filmWindow');
-  const FILM_CENTER=3, FILM_COUNT=9, FILM_SLIDE_MS=890;
+  const FILM_CENTER=3, FILM_COUNT=9, FILM_SLIDE_MS=790;
   let filmTransitionToken=0, filmAnimationTimeout=null;
   // Public Drive image normalizer. If Vercel cannot retrieve a public thumbnail,
   // each image automatically falls back to the untouched Drive URL.

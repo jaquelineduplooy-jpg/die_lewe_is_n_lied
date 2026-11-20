@@ -1,8 +1,8 @@
 {
   "name": "flip60-memory-reel",
-  "version": "9.0.0",
+  "version": "13.0.0",
   "private": true,
-  "description": "Flip se storie and separate Google Drive memory reel",
+  "description": "Flip60 story page, 8-second moving photo memories, and separate fullscreen Live Reel",
   "dependencies": {
     "sharp": "^0.34.1"
   },

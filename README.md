@@ -1,35 +1,34 @@
-# Flip60 V11 — Click & Upload, no QR code needed
+# Flip60 V13 — final pre-launch website
 
-All Flip60 V10 story design, portrait avatar and ordered 10-second Memory Reel code remain unchanged.
-The existing Google Apps Script feed is extended with a separate photo-uploader page.
+**Purpose:** Flip se storie, portrait video avatar, moving memory strip, and separate fullscreen Live Reel. This is a story page, not a birthday invitation.
 
-## Shareable upload URL — available only AFTER redeployment
+**Current settings:** 8 seconds per photo; the photo directly to the right becomes the next frame; sequential/no shuffle; full photo contained (with optional conservative black-matte cleanup via the Vercel image endpoint).
+
+**Cleaner homepage:** the 3-button Memory Reel toolbar and second large Live Reel promotional panel have been removed. The photo-strip header has one discreet link to `live-reel.html`. Photo upload remains in the site navigation.
+
+**V12 functionality preserved:** Nibble Sip Repeat advert on the standalone Live Reel, Flip's looping portrait YouTube avatar, Google Drive feed, upload link and read-only image processing.
+
+## Deploy
+
+1. Unzip **all files**, keeping `index.html`, `live-reel.html`, `vercel.json`, `package.json`, the `assets` directory and the `api`/`lib` directories together at the website project root.
+2. Deploy the whole site to Vercel as a single project. `api/photo.js` requires the Node runtime and `sharp` dependency from `package.json`. The page still falls back to direct Google Drive thumbnails if the image endpoint is unreachable.
+3. Verify `https://YOUR-SITE/live-reel` or `/live-reel.html` works with real images and the correct order (8 seconds), then test pause/resume.
+4. From an incognito/guest phone, test the live upload link with a small test photo. The uploader only works after the *existing* Google Apps Script deployment is updated to a version that contains `google-apps-script/Code.gs` and `google-apps-script/Upload.html`.
+5. Set an absolute Open Graph preview image URL when the public Flip60 domain is known (the included `og:image` currently uses a relative asset). Check the WhatsApp link preview before broad distribution.
+6. Verify YouTube avatar playback on iPhone and Android. Mobile autoplay sound is subject to YouTube/browser restrictions.
+
+**No change to Don's Still On Fire site or Google Drive feed.**
+
+## Upload link
 
 https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec?page=upload&key=-EA69j8zM0v3n7AMDfxw2A
 
-Share the link in WhatsApp. Guests select up to 20 photos at a time and press **Laai foto’s op**. No Google login is required when the Web App is deployed **Execute as Me / Anyone**.
-Each JPEG, PNG, HEIC, HEIF, WebP, GIF or AVIF file must be under 12 MB. The uploaded photos are saved directly into Flip60’s existing Drive folder. The account that deployed the Apps Script owns the uploaded files and guests never receive folder editor permissions.
+The link permits upload-only by holders of the URL once the Apps Script is deployed with **Execute as Me / Anyone**. Share with trusted guests.
 
-## Enable (two-file change to your existing Google Apps Script)
+## Feed
 
-1. Sign in as **duplooy717@gmail.com** and open the existing **Flip60 Live Memory Reel** project at script.google.com.
-2. Replace the contents of **Code.gs** with `google-apps-script/Code.gs` from this ZIP. **Do not delete existing functions; this Code.gs preserves the feed and adds upload support.**
-3. In the editor, click **+ → HTML**, name the file **Upload**, and paste the contents of `google-apps-script/Upload.html`.
-4. Save. Run `testFlip60Uploader()` once if Google requests authorization.
-5. Select **Deploy → Manage deployments → Edit (pencil)** on the *existing* Flip60 web-app deployment; choose **New version**, and click **Deploy**. Keep **Execute as Me** and **Who has access: Anyone**. Updating the existing deployment preserves its `/exec` URL.
-6. Open the URL above in a private/incognito window. Pick a test photo and confirm it appears in the correct Drive folder and in the reel after refresh.
-7. Deploy this website folder on Vercel. Flip60’s story page and separate live-reel page now show **Stuur jou foto’s** buttons instead of the QR JPEG.
+Photo feed URL is in `config.js`. The Google Drive folder is the user's separate Flip60 folder. Refresh interval remains 2 minutes.
 
-> This link is **not yet live** until steps 1–5 are completed. Do not share it before testing. The existing public Drive folder URL only lets guests upload if they have editor rights, which is not recommended.
+## Source limitation
 
-## Safety
-
-- Anyone with the upload URL can upload photos. Share with trusted guests; don’t post on public social media.
-- Files are checked for image formats and limited to 12 MB each; uploads are never allowed to delete or edit the album.
-- New photos are set to view-only link sharing where Google Drive policy permits so the reel can display them; ensure guests consent to sharing their pictures on the birthday website.
-- Google Apps Script web apps have execution quotas and limitations; the 12 MB limit is a conservative usability setting, not a Google-guaranteed maximum. Large videos are not supported by this uploader.
-- Don’s Still On Fire code and folder are not used or changed.
-
-
-## V12 — Nibble Sip Repeat Live Reel promotion
-The Live Reel sidebar has been replaced by a self-contained Nibble Sip Repeat advertisement pointing to `https://nibblesiprepeat.com/`. The same panel appears in both `live-reel.html` and the optional fullscreen overlay embedded in `index.html`. The new scoped stylesheet is `nsr-promo.css` and artwork is `assets/nsr-secret-weekend.svg`. No photo reel code, Google Drive feed, upload page, timing or controls were modified. The advertisement references the approved Nibble Sip Repeat concept: hidden places, real connections, less scrolling, more connecting, and the Secret List. The website URL should be validated on a live device before distribution.
+The public Still On Fire website and original V33 source code could not be retrieved from this environment. V13 preserves the previously established sequential adjacent-photo movement and simplifies presentation; it is not a byte-for-byte copy of V33.

@@ -11,7 +11,7 @@ window.FLIP60_CONFIG = Object.freeze({
   DRIVE_FOLDER_ID: "10qytscu6v9hxoqTLKuNcfqvbfkvB31P6",
   DRIVE_FOLDER_URL: "https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link",
   ORGANISER_WHATSAPP: "27723144350", // vehicle permit / sharing photos, NOT RSVP
-  REEL_INTERVAL_MS: 10000, // V33: 10s per image, deterministic right-hand handoff
+  REEL_INTERVAL_MS: 8000, // V13: 8s per image; sequential right-neighbour handoff, no shuffle
   FEED_REFRESH_MS: 120000, // every two minutes
   AUTO_HERO_FROM_FEED: false, // preserve the bespoke 1966 hero; Google Drive still powers the Memory Reel
   HERO_PHOTO_ID: "" // optional: preferred Drive file ID for Flip's hero picture

@@ -1,6 +1,6 @@
 /* FLIP60 V7 — A STORY, NOT AN INVITATION.
    Layout inspired by the approved hero/story/reel composition. No orange gradient shading.
-   Reel logic is inherited intact from the moving 10-second V33-style player. */
+   Sequential reel behavior retained; active interval is 8 seconds in V13. */
 :root{
   --navy:#092b45; --navy-deep:#062238; --aqua:#009da6; --aqua-deep:#00757d;
   --coral:#ff633c; --sun:#ffdc4f; --cream:#fff4df; --ivory:#fffbf3;
@@ -419,27 +419,25 @@ main{padding:0 0 0}
 }
 @media(prefers-reduced-motion:reduce){.avatar-sound-button{transition:none}}
 
-/* FLIP60 V10 — story-page reel is the moving filmstrip ONLY. */
-.live-reel-launch{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:24px;padding:24px 28px;background:#08354b;border:1px solid rgba(255,255,255,.17);border-radius:18px;color:white}
-.live-reel-launch-copy h3{font:400 clamp(1.9rem,3.2vw,2.9rem)/1.1 Georgia,serif;margin:7px 0;color:#fff8e8}
-.live-reel-launch-copy h3 em{color:#ffdf54}
-.live-reel-launch-copy p{margin:6px 0 0;max-width:620px;line-height:1.5;color:#d5eff1;font-size:.92rem}
-.launch-live-button{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:55px;padding:14px 20px;background:#ffda4b;border-radius:999px;color:#082d42!important;text-decoration:none;font-size:.78rem;font-weight:900;letter-spacing:.06em;white-space:nowrap;box-shadow:0 5px 0 #ce9a32}
-.launch-live-button:hover{background:#fff0a1;transform:translateY(-1px)}
-.memory-head-actions a.small-outline{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font-weight:850}
-.memory-footer{justify-content:flex-start!important;flex-wrap:wrap;gap:12px!important}
-.memory-footer>span{flex:1;min-width:250px}
-.memory-footer a{display:inline-flex;align-items:center;white-space:nowrap}
-.memory-footer .qr-download{background:#fff0d3;color:#072f43}
-@media(max-width:720px){.live-reel-launch{align-items:stretch;flex-direction:column;padding:22px 19px}.launch-live-button{white-space:normal}.memory-footer>span{flex:1 0 100%}.memory-footer a{font-size:.68rem}}
-
 /* V10 Live Reel: prevent blur layers from washing over the TV viewport. */
 .tv-main>.tv-photo-backdrop, .tv-adj::before{display:none!important}
 
-/* V11 — One-click photo uploads: retain Flip60 styling and film reel. */
-.memory-head-actions {flex-wrap:wrap!important;justify-content:flex-end}
-.memory-head-actions .upload-link {display:inline-flex;align-items:center;justify-content:center;background:#ffda52!important;color:#082b43!important;border:1px solid #ffda52!important;text-decoration:none!important;font-weight:900;font-size:.78rem;letter-spacing:.045em}
-.memory-head-actions .upload-link:hover {background:#ff7950!important;color:#082b43!important;border-color:#ff7950!important}
-.memory-footer .upload-link {background:#ff7950!important;color:#082b43!important}
-@media(max-width:720px){.memory-head-actions{display:grid!important;grid-template-columns:1fr 1fr!important;justify-content:stretch}.memory-head-actions .upload-link{font-size:.67rem!important;text-align:center;min-height:46px;padding:8px 9px}.memory-head-actions>a:nth-of-type(2){grid-column:1/-1}}
-@media(max-width:395px){.memory-head-actions{grid-template-columns:1fr!important}.memory-head-actions>a:nth-of-type(2){grid-column:auto}}
+
+/* V13 — Still On Fire-style, uncluttered memory strip */
+.memory-intro{display:block!important;margin-bottom:22px!important}
+.memory-intro>div:first-child{max-width:850px}
+.film-live-link{color:#ffe36c;text-decoration:none;display:inline-flex;align-items:center;gap:10px;font:800 .69rem/1.4 system-ui,sans-serif;letter-spacing:.12em;white-space:nowrap;border-bottom:1px solid rgba(255,227,108,.6);padding:6px 0;transition:color .18s ease}
+.film-live-link:hover,.film-live-link:focus-visible{color:#fff9d9;border-bottom-color:#fff9d9}
+.film-live-link:focus-visible{outline:2px solid #fff4cc;outline-offset:5px}
+.film-live-link span{font-size:1.15rem;line-height:1}
+.memory-footer{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:12px!important;flex-wrap:wrap!important;margin-top:15px!important;padding-inline:4px;color:#effafa!important}
+.memory-footer>span{flex:none!important;min-width:0!important}
+.memory-footer-note{color:#d8f5f5;font-size:.62rem;letter-spacing:.12em;opacity:.9}
+.film-river{margin-bottom:0!important}
+@media(max-width:700px){
+  .memory-intro{margin-bottom:18px!important}
+  .film-river-heading{gap:10px!important}
+  .film-live-link{font-size:.57rem;letter-spacing:.06em;white-space:normal;text-align:right}
+  .memory-footer{flex-direction:column!important;align-items:flex-start!important;gap:7px!important}
+  .memory-footer-note{font-size:.54rem}
+}

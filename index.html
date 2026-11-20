@@ -12,20 +12,20 @@
   <meta property="og:image" content="assets/social-preview.jpg">
   <title>Flip se storie · Talent is permanent</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="legacy.css?v=11.0">
-  <link rel="stylesheet" href="story.css?v=11.0">
-  <link rel="stylesheet" href="nsr-promo.css?v=12">
-  <script src="config.js?v=11.0" defer></script>
-  <script src="app.js?v=11.0" defer></script>
-  <script src="hero.js?v=11.0" defer></script>
-  <script src="avatar.js?v=11.0" defer></script>
+  <link rel="stylesheet" href="legacy.css?v=13.0">
+  <link rel="stylesheet" href="story.css?v=13.0">
+  <link rel="stylesheet" href="nsr-promo.css?v=13.0">
+  <script src="config.js?v=13.0" defer></script>
+  <script src="app.js?v=13.0" defer></script>
+  <script src="hero.js?v=13.0" defer></script>
+  <script src="avatar.js?v=13.0" defer></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Spring na die storie</a>
 <nav class="nav" id="top" aria-label="Hoofnavigasie">
   <div class="nav-inner">
     <a class="brand" href="#top" aria-label="Flip se storie, terug boontoe">FLIP<span class="brand-sun">✳</span>60<small>'N LEWE IS 'N LIED</small></a>
-    <div class="nav-links"><a href="#storie">Flip se storie</a><a href="#avatar">Flip sê dit self</a><a href="#herinneringe">Memory Reel</a><a href="#hoofstukke">Die mooiste mooi</a><a href="https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec?page=upload&key=-EA69j8zM0v3n7AMDfxw2A" target="_blank" rel="noopener noreferrer">↑ Stuur jou foto’s</a></div>
+    <div class="nav-links"><a href="#storie">Flip se storie</a><a href="#avatar">Flip sê dit self</a><a href="#herinneringe">Memory Reel</a><a href="#hoofstukke">Die mooiste mooi</a></div>
     <a class="nav-cta" href="https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec?page=upload&key=-EA69j8zM0v3n7AMDfxw2A" target="_blank" rel="noopener noreferrer">STUUR JOU FOTO’S <span aria-hidden="true">↑</span></a>
     <button class="menu-toggle" type="button" aria-label="Maak kieslys oop" aria-expanded="false" aria-controls="mobileNav"><span></span><span></span><span></span></button>
   </div>
@@ -69,17 +69,13 @@
 
   <section class="section reel-section" id="herinneringe" aria-labelledby="memoriesTitle">
     <div class="card memory-card">
-      <div class="memory-intro"><div><div class="kicker">’N LEWENDE ROLPRENT</div><h2 class="section-title" id="memoriesTitle">Flip se Reel van <em>Herinneringe.</em></h2><p>Die mense. Die lag. Die oomblikke. En al die stories wat hom Flip maak.</p></div><div class="memory-head-actions"><a class="small-outline upload-link" href="https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec?page=upload&key=-EA69j8zM0v3n7AMDfxw2A" target="_blank" rel="noopener noreferrer">↑ STUUR JOU FOTO’S</a><button type="button" id="refreshFeed" class="small-outline">↻ Verfris die foto’s</button><a id="openLiveReel" href="live-reel.html" target="_blank" rel="noopener" class="small-outline filled">▶ Live Reel / Groot skerm ↗</a></div></div>
+      <div class="memory-intro"><div><div class="kicker">’N LEWENDE ROLPRENT</div><h2 class="section-title" id="memoriesTitle">Flip se Reel van <em>Herinneringe.</em></h2><p>Die mense. Die lag. Die oomblikke. En al die stories wat hom Flip maak.</p></div></div>
       <div class="film-river" id="filmRiver" aria-label="Bewegende herinneringefilm">
-        <div class="film-river-heading"><span class="film-overline"><span class="film-live-dot"></span> FOTO’S IN BEWEGING</span><span class="film-motion-note">DIE FOTO REGS IS VOLGENDE <span aria-hidden="true">←</span></span></div>
+        <div class="film-river-heading"><span class="film-overline"><span class="film-live-dot"></span> FOTO’S IN BEWEGING</span><a class="film-live-link" href="live-reel.html" target="_blank" rel="noopener" aria-label="Open Flip se Live Memory Reel in ’n nuwe blad">BEKYK DIE LIVE REEL <span aria-hidden="true">↗</span></a></div>
         <div class="film-window" id="filmWindow"><div class="film-track" id="memoryTrack" aria-live="off"></div></div>
-        <div class="film-river-foot"><span>ELKE 10 SEKONDES · IN VOLGORDE · GEEN SKOMMELING</span><span id="filmCount">LAAI FOTO’S …</span></div>
+        <div class="film-river-foot"><span>ELKE 8 SEKONDES · IN VOLGORDE · GEEN SKOMMELING</span><span id="filmCount">LAAI FOTO’S …</span></div>
       </div>
-      <div class="live-reel-launch" aria-label="Maak Flip se Live Reel oop">
-        <div class="live-reel-launch-copy"><span class="film-overline">AFSONDERLIKE GROOT-SKERM REEL</span><h3>Die herinneringe. <em>Lewendig.</em></h3><p>Maak die Live Reel op ’n nuwe blad oop — die foto’s beweeg outomaties, elke tien sekondes, in volgorde.</p></div>
-        <a class="launch-live-button" href="live-reel.html" target="_blank" rel="noopener" aria-label="Maak Flip se Live Memory Reel in ’n nuwe blad oop">▶ OPEN DIE LIVE REEL <span aria-hidden="true">↗</span></a>
-      </div>
-      <div class="memory-footer"><span>✳ DIE MOOISTE MOMENTE IS DIE WAT ONS DEEL.</span><a class="upload-link" href="https://script.google.com/macros/s/AKfycbyquwgPZ35geFi2pL_u0VBgMkMb8pzzzSFBoCFHBUHWDWhaPrXkfBIw9DNG2lUu0IZ8sQ/exec?page=upload&key=-EA69j8zM0v3n7AMDfxw2A" target="_blank" rel="noopener noreferrer">↑ KLIK &amp; LAAI FOTO’S OP</a><a id="driveFolderLink" href="https://drive.google.com/drive/folders/10qytscu6v9hxoqTLKuNcfqvbfkvB31P6?usp=drive_link" target="_blank" rel="noopener noreferrer">BEKYK FOTO-ALBUM ↗</a></div>
+      <div class="memory-footer"><span>✳ DIE MOOISTE MOMENTE IS DIE WAT ONS DEEL.</span><span class="memory-footer-note">DIE FOTO DIREK REGS KOM VOLGENDE · GEEN SKOMMELING</span></div>
     </div>
   </section>
 
