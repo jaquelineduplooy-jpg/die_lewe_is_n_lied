@@ -1,0 +1,20 @@
+FLIP60 V17 — OOMBlikke WAT BLY — FINAL WEBSITE
+
+CHANGES
+- Removed dashed film-perforation bars above and below the homepage moving Memory Reel.
+- Removed all thick per-photo borders, coloured focus blocks and photo filename bars.
+- Portrait and landscape photos keep their original proportions; object-fit: contain.
+- Kept newest-first ordering, 8-second sequential right-to-centre movement, no shuffle.
+- Preserved separate full-screen Live Reel with Nibble Sip Repeat advert.
+- Preserved both YouTube videos and the original Google Drive Apps Script URL.
+- Cached CSS/JS assets now use ?v=17.0 to force refresh on redeploy.
+
+TO REPLACE THE LIVE WEBSITE
+1. Back up the current Vercel project/repository.
+2. Deploy all files from this ZIP in the same static project/root (do not upload only index.html).
+3. Verify index and /live-reel from a signed-out phone browser.
+4. Check at least one landscape and one portrait photo, then wait 8 sec for next frame.
+5. Confirm newest-first and photo count. Verify the existing Apps Script public /exec endpoint as needed.
+
+NO SCRIPT REDEPLOY REQUIRED FOR THESE VISUAL CHANGES.
+The website is not deployed simply by downloading this ZIP.

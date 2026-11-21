@@ -86,7 +86,7 @@ main{padding:0 0 0}
 .film-overline,.film-river-foot,.film-motion-note{color:#f7ead2!important;font-size:.63rem;font-weight:900;letter-spacing:.15em}
 .film-motion-note span{color:var(--sun)!important}
 .film-live-dot{background:var(--coral)!important;box-shadow:0 0 0 5px rgba(255,99,60,.18)!important}
-.film-window{background:#031a2b!important;border:0!important;border-top:10px dashed #f7ead2!important;border-bottom:10px dashed #f7ead2!important;border-radius:10px!important;height:214px!important}
+.film-window{background:#031a2b!important;border:0!important;border-top:0!important;border-bottom:0!important;border-radius:10px!important;height:214px!important}
 .film-window:before,.film-window:after{display:none!important}
 .film-track{top:9px!important;height:175px!important;gap:13px!important}
 .film-frame{height:174px!important;width:255px!important;flex-basis:255px!important;border-radius:7px!important;border:5px solid #fff8e7!important;box-shadow:none!important;background:#153752!important;opacity:.75}
@@ -221,7 +221,7 @@ main{padding:0 0 0}
  .memory-intro .section-title{font-size:clamp(2.65rem,10.2vw,4.7rem);line-height:.98}
  .memory-head-actions{display:grid;width:100%;grid-template-columns:1fr 1fr}.memory-head-actions button{font-size:.62rem;min-height:46px;white-space:normal;padding:8px 12px}
  .film-river{padding:18px 10px 12px!important;border-radius:13px!important}
- .film-window{height:156px!important;border-top-width:7px!important;border-bottom-width:7px!important}
+ .film-window{height:156px!important;border-top-width:0!important;border-bottom-width:0!important}
  .film-track{height:126px!important;top:8px!important;gap:10px!important}
  .film-frame{height:126px!important;width:185px!important;flex-basis:185px!important;border-width:4px!important}
  .film-river-foot{flex-direction:column;gap:4px!important;line-height:1.35}
@@ -350,7 +350,7 @@ main{padding:0 0 0}
 .tv-main>.tv-old-ghost{z-index:3!important}
 .tv-main>.tv-progress,.tv-main>.tv-video-placeholder{z-index:5!important}
 @media(max-width:700px){
- .film-window{height:200px!important;border-top-width:7px!important;border-bottom-width:7px!important}
+ .film-window{height:200px!important;border-top-width:0!important;border-bottom-width:0!important}
  .film-track{height:173px!important;top:7px!important;gap:10px!important}
  .film-frame{height:173px!important;width:208px!important;flex:0 0 208px!important;border-width:4px!important}
  .film-frame.is-wide{width:208px!important;flex-basis:208px!important}
@@ -447,3 +447,77 @@ main{padding:0 0 0}
 .reel-media { grid-template-rows:minmax(0,1fr)!important; }
 .reel-media>.reel-caption { display:none!important; height:0!important; }
 .film-frame .film-picture img,.reel-media>img,.tv-main>img,.tv-adj img { image-orientation:from-image; }
+
+
+/* V17 GO-LIVE — OOMBlikke WAT BLY: clean, borderless, moving photographs.
+   The old film-perforation bars are removed from .film-window directly.
+   No coloured image blocks, thick white/yellow frames, filename plates, or dark overlays.
+   Original images are never cropped and the JS movement stays untouched. */
+.film-window {
+  height: 204px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #071f34 !important;
+  border: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  border-radius: 8px !important;
+}
+.film-window::before,
+.film-window::after {
+  content: none !important;
+  display: none !important;
+  border: 0 !important;
+  background: none !important;
+}
+.film-track {
+  top: 0 !important;
+  left: 0 !important;
+  height: 204px !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+.film-frame,
+.film-frame.is-center,
+.film-frame.is-near {
+  height: 204px !important;
+  border: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  background: transparent !important;
+  border-radius: 6px !important;
+  transform: none !important;
+  overflow: hidden !important;
+}
+.film-frame.is-wide { width: 260px !important; flex-basis: 260px !important; }
+.film-frame.is-square { width: 204px !important; flex-basis: 204px !important; }
+.film-frame.is-portrait { width: 148px !important; flex-basis: 148px !important; }
+.film-frame.is-tall { width: 116px !important; flex-basis: 116px !important; }
+.film-picture {
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 6px !important;
+  background: #102b40 !important;
+}
+.film-picture::before { opacity: .22 !important; }
+.film-frame .film-picture img {
+  object-fit: contain !important;
+  background: transparent !important;
+}
+.film-frame-caption, .film-caption {
+  display: none !important;
+  height: 0 !important;
+  padding: 0 !important;
+}
+@media (max-width:700px) {
+  .film-window { height: 162px !important; border-top: 0 !important; border-bottom: 0 !important; }
+  .film-track { height: 162px !important; top: 0 !important; gap: 8px !important; }
+  .film-frame, .film-frame.is-center, .film-frame.is-near { height: 162px !important; }
+  .film-frame.is-wide { width: 208px !important; flex-basis: 208px !important; }
+  .film-frame.is-square { width: 162px !important; flex-basis: 162px !important; }
+  .film-frame.is-portrait { width: 118px !important; flex-basis: 118px !important; }
+  .film-frame.is-tall { width: 96px !important; flex-basis: 96px !important; }
+}

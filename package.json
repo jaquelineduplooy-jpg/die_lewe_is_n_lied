@@ -1,8 +1,8 @@
 {
   "name": "flip60-oomblikke-wat-bly",
-  "version": "16.0.0",
+  "version": "17.0.0",
   "private": true,
-  "description": "Flip60 story, newest-first Oomblikke wat Bly, clean photo frames, auto EXIF orientation, two videos, Live Reel and Nibble Sip Repeat",
+  "description": "Flip60 Oomblikke wat Bly: borderless moving reel, newest first, two videos, Live Reel and Nibble Sip Repeat",
   "dependencies": {
     "sharp": "^0.34.1"
   },
