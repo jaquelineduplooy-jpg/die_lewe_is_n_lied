@@ -48,6 +48,11 @@
       endpoint.searchParams.set('id',item.id);
       const key=input.searchParams.get('resourcekey');
       if(key)endpoint.searchParams.set('resourcekey',key);
+      // Most phones are corrected automatically by EXIF in /api/photo.
+      // Only exceptional, already-sideways uploads need a file-ID override.
+      const overrides=config.PHOTO_ROTATION_OVERRIDES||{};
+      const turn=Number(Object.prototype.hasOwnProperty.call(overrides,item.id)?overrides[item.id]:0);
+      if([90,180,270].includes(turn))endpoint.searchParams.set('turn',String(turn));
       return endpoint.href;
     }catch(_){return direct;}
   }
@@ -112,10 +117,8 @@
       const badge=document.createElement('span');badge.className='film-frame-video';
       badge.textContent='▶ VIDEO';picture.appendChild(badge);
     }
-    const caption=document.createElement('div');caption.className='film-frame-caption';
-    caption.textContent=item.caption||item.name;
-    caption.title=item.caption||item.name;
-    frame.append(picture,caption);
+    // The photo is the story: no filename bar beneath filmstrip images.
+    frame.append(picture);
     return frame;
   }
   function setFilmPosition(position,animated){
@@ -226,7 +229,7 @@
     if(!image) return null;
     const orig=safeHttps(input.originalUrl||input.original||input.previewUrl||input.viewUrl||input.url)||image;
     return { id, name:String(input.name||input.title||`Herinnering ${i+1}`), caption:String(input.caption||input.name||`Herinnering ${i+1}`), type, mimeType:mime,
-      image, original:orig, preview:safeHttps(input.previewUrl||input.viewUrl)||orig, video:safeHttps(input.videoUrl||input.streamUrl||''), createdAt:input.createdAt||'' };
+      image, original:orig, preview:safeHttps(input.previewUrl||input.viewUrl)||orig, video:safeHttps(input.videoUrl||input.streamUrl||''), createdAt:input.createdAt||'', updatedAt:input.updatedAt||'' };
   }
   function currentLabel(){return isFeedLoaded?`${currentIndex+1} / ${photos.length} HERINNERINGE`:'1966-TEMAVOORSKOU';}
   function updateImage(node,item){
@@ -307,10 +310,8 @@
         if(image.parentNode)brokenPhoto(container,item);
       });
     }
-    const caption=document.createElement('div');caption.className='reel-caption';
-    caption.id='mediaCaption';
-    caption.textContent=(isVideo(item)?'▶ VIDEO · ':'')+(item.caption||'Flip se herinneringe');
-    container.appendChild(caption);
+    // No file-name caption across the bottom of the larger photo viewer.
+    // Image alt text, filename metadata and video controls are preserved.
   }
   function showVideoPoster(container,item){
     container.replaceChildren();
@@ -451,8 +452,11 @@
     if(!data)return[];
     const list=Array.isArray(data)?data:(data.items||data.images||data.photos||[]);
     if(!Array.isArray(list))return[];
-    // KEEP SOURCE ORDER: Never shuffle, randomize or use a subset/14-item cap.
-    return list.map(normalize).filter(Boolean);
+    // Newest upload first, even if the previously deployed Apps Script still sends oldest first.
+    // Stable ties preserve the server's order. No shuffle, no photo limit, no double-reverse.
+    return list.map(normalize).filter(Boolean).sort((a,b)=>
+      String(b.createdAt||b.updatedAt||'').localeCompare(String(a.createdAt||a.updatedAt||''))
+    );
   }
   function fetchJsonp(url){
     return new Promise((resolve,reject)=>{

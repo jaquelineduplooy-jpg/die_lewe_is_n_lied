@@ -17,7 +17,7 @@
  * browsers. Check thumbnail load as a signed-out visitor before sharing.
  */
 var FLIP60_FOLDER_ID = '10qytscu6v9hxoqTLKuNcfqvbfkvB31P6';
-var FLIP60_FEED_VERSION = '3.0.0';
+var FLIP60_FEED_VERSION = '4.0.0';
 var FLIP60_CACHE_SECONDS = 75;
 // A link-only passcode. Treat the URL as private to guests, not as a public listing.
 var FLIP60_UPLOAD_KEY = '-EA69j8zM0v3n7AMDfxw2A';
@@ -65,7 +65,7 @@ function doGet(e) {
 }
 
 function collectMedia_(forceRefresh) {
-  var cache = null, cacheKey = 'flip60_media_v3_'+FLIP60_FOLDER_ID;
+  var cache = null, cacheKey = 'flip60_media_v4_newest_'+FLIP60_FOLDER_ID;
   try {cache = CacheService.getScriptCache();} catch(ignore) {}
   if (cache && !forceRefresh) {
     try {
@@ -111,7 +111,7 @@ function collectMedia_(forceRefresh) {
       var size = 0;try {size=file.getSize();}catch(ignore){}
       items.push({
         id:id, fileId:id, type:isVideo?'video':'image', name:name,
-        caption:name.replace(/\.[^.]+$/, '').replace(/[_-]+/g,' ').trim(),
+        caption:'',
         mimeType:mime,
         thumbnailUrl:thumb, image:thumb, posterUrl:thumb,
         originalUrl:view, previewUrl:preview,
@@ -127,10 +127,11 @@ function collectMedia_(forceRefresh) {
     }
   }
   addFolder(root,root.getName());
-  // Stable chronological order, including all photos/videos in subfolders.
-  // Never shuffle, never slice to 10 or 14 items.
+  // Latest files ADDED TO DRIVE first. Always chronological, never random.
+  // Source is Drive file creation time (upload time), not the date of a historical photo.
+  // Retain every file from all folders, including mixed photo/video media.
   items.sort(function(a,b) {
-    var diff = (a.createdAt||'').localeCompare(b.createdAt||'');
+    var diff = (b.createdAt||b.updatedAt||'').localeCompare(a.createdAt||a.updatedAt||'');
     if (diff) return diff;
     diff = a.name.localeCompare(b.name);
     return diff || a.id.localeCompare(b.id);
@@ -140,7 +141,7 @@ function collectMedia_(forceRefresh) {
   var data = {ok:true,version:FLIP60_FEED_VERSION,folderId:FLIP60_FOLDER_ID,
     folderName:root.getName(), generatedAt:new Date().toISOString(),
     count:items.length,imageCount:imageCount,videoCount:videoCount,
-    sort:'created_at_ascending',items:items};
+    sort:'created_at_descending',items:items};
   try {
     var encoded = JSON.stringify(data);
     // A single Google CacheService entry is limited to 100 KB.

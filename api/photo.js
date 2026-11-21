@@ -10,6 +10,8 @@ module.exports = async function handler(req,res) {
   if(req.method!=='GET')return res.status(405).json({error:'GET required'});
   const id=String(req.query?.id||'');
   const resourceKey=String(req.query?.resourcekey||'');
+  const turn=Number(req.query?.turn||0);
+  if(![0,90,180,270].includes(turn))return res.status(400).json({error:'Invalid rotation'});
   if(!/^[A-Za-z0-9_-]{12,120}$/.test(id) || (resourceKey&&!/^[A-Za-z0-9_-]{1,140}$/.test(resourceKey))) return res.status(400).json({error:'Invalid file identifier'});
   const pictureUrl=new URL('https://drive.google.com/thumbnail');
   pictureUrl.searchParams.set('id',id);
@@ -25,10 +27,12 @@ module.exports = async function handler(req,res) {
     if(Number(upstream.headers.get('content-length')||0)>16_000_000)throw new Error('Image too large');
     const source=Buffer.from(await upstream.arrayBuffer());
     if(source.length>16_000_000)throw new Error('Image too large');
-    const result=await processPhoto(source,{maxDimension:1900});
+    const result=await processPhoto(source,{maxDimension:1900,turn});
     res.setHeader('Content-Type','image/webp');
     res.setHeader('Cache-Control','public,max-age=3600,s-maxage=86400,stale-while-revalidate=604800');
     res.setHeader('X-Flip60-Matte-Trimmed',result.crop.changed?'yes':'no');
+    res.setHeader('X-Flip60-Auto-Oriented','exif');
+    res.setHeader('X-Flip60-Manual-Rotation',String(turn));
     return res.status(200).end(result.buffer);
   } catch(e) {
     // An image element will fall back to the untouched Google Drive thumbnail.

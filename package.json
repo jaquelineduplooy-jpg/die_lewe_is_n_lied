@@ -1,8 +1,8 @@
 {
-  "name": "flip60-memory-reel",
-  "version": "15.0.0",
+  "name": "flip60-oomblikke-wat-bly",
+  "version": "16.0.0",
   "private": true,
-  "description": "Flip60: preserved portrait avatar, new final film in former vinyl area, photo-led Nibble Sip Repeat promo, 8-second ordered live reel",
+  "description": "Flip60 story, newest-first Oomblikke wat Bly, clean photo frames, auto EXIF orientation, two videos, Live Reel and Nibble Sip Repeat",
   "dependencies": {
     "sharp": "^0.34.1"
   },

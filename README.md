@@ -1,10 +1,24 @@
+# Flip60 V16 — Oomblikke wat Bly
+
+**Vervang die huidige webwerf; moenie 'n nuwe Flip60-projek skep nie.** Die nuwe weergawe behou die hele V15-ontwerp en die twee YouTube-video's, en vervang slegs die herinneringsreel se naam, sortering, onderskrifte en outomatiese EXIF-oriëntasiehantering.
+
+- Nuutste Google Drive-oplaaie eerste; geen skommeling nie; 8 sekondes per foto
+- Geen lêername onder die foto's nie; die bykomende aanwysingsin verdwyn
+- Outomatiese vertoonregstelling wanneer EXIF-oriëntasiedata bestaan; Drive-lêers word nie verander nie
+- Die groot Live Reel en Nibble Sip Repeat-advertensie bly soos tevore
+- Die bestaande RemoveDuplicates.gs moet ongewysig bly
+
+**Lees `VERVANG-V16.txt` vir volledige vervangingsinstruksies, insluitend die bestaande Google Apps Script-ontplooiing.**
+
+---
+
 # Flip60 V15 FINAL — Two Videos + Nibble Sip Repeat
 
 The portrait avatar and the final film are TWO SEPARATE videos: `b_pDUOJ1tEs` remains in **Flip sê dit self**; `Goe1WM8Zf9Q` replaces ONLY the vinyl/CD player in the purple **Liefhê sonder einde** panel.
 
 Nibble Sip Repeat's photo-led promotional panel is in the separate `live-reel.html` page (and fullscreen reel). Flip's 8-second memory filmstrip, Google Drive configuration, upload link and the rest of the design are preserved.
 
-Deploy this extracted folder as a *new Flip60 Vercel project*. The `package.json` includes the `sharp` dependency for `/api/photo` image processing. Check both YouTube embeds, the Drive feed and public uploads on the deployed URL.
+Deploy this extracted folder as a replacement in the *existing Flip60 Vercel project*. The `package.json` includes the `sharp` dependency for `/api/photo` image processing. Check both YouTube embeds, the Drive feed and public uploads on the deployed URL.
 
 # Flip60 V13 — final pre-launch website
 

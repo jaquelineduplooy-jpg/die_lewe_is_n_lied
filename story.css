@@ -441,3 +441,9 @@ main{padding:0 0 0}
   .memory-footer{flex-direction:column!important;align-items:flex-start!important;gap:7px!important}
   .memory-footer-note{font-size:.54rem}
 }
+
+/* V16 — OOMBlikke WAT BLY: uncropped photos, no file-name bars. */
+.film-frame-caption { display:none!important; height:0!important; }
+.reel-media { grid-template-rows:minmax(0,1fr)!important; }
+.reel-media>.reel-caption { display:none!important; height:0!important; }
+.film-frame .film-picture img,.reel-media>img,.tv-main>img,.tv-adj img { image-orientation:from-image; }

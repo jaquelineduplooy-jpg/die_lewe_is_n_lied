@@ -1,0 +1,39 @@
+FLIP60 V16 — OOMBlikke WAT BLY
+VOLLEDIGE VERVANGINGSWEERGAWE • 21 NOVEMBER 2026
+
+WAT VERANDER HET
+- 'Memory Reel' se sigbare naam: Oomblikke wat Bly
+- Nuutste Drive-foto's EERSTE, volgens Drive-lêer se skeppingstyd (wanneer dit opgelaai is)
+- Geen WhatsApp-/lêername onder die foto's in die bewegende strook of groot kyker nie
+- 'DIE FOTO DIREK REGS KOM VOLGENDE · GEEN SKOMMELING' is verwyder
+- 8-sekonde, opeenvolgende beweging, pouse en volskerm bly dieselfde
+- Foto's se EXIF-oriëntasie word outomaties reggestel deur die Vercel /api/photo-verwerker (waar die metadata beskikbaar is)
+- Die oorspronklike Google Drive-foto's word NOOIT gedraai of verander nie
+- Die twee Flip-video's en die Nibble Sip Repeat-advertensie bly onaangeraak
+
+A. VERVANG DIE VOLLEDIGE WEBWERF
+1. Maak 'n rugsteun van die huidige Flip60-weergawe.
+2. Vervang die webwerf se lêers in die bestaande Flip60 GitHub/Vercel-projek met AL die lêers binne hierdie ZIP (die ZIP het die werf se lêers in die wortelgids).
+3. Ontplooi as 'n NUWE weergawe van dieselfde webwerf. Geen verandering aan die Google Drive-vouer of domein is nodig nie.
+
+B. VERVANG DIE VOLLEDIGE GOOGLE APPS SCRIPT
+1. Meld aan as duplooy717@gmail.com en maak die bestaande projek 'Flip60 Live Memory Reel' oop.
+2. Open Code.gs; vervang die HELE inhoud met die ingeslote google-apps-script/Code.gs (dieselfde inhoud is apart vir aflaai beskikbaar).
+3. MOENIE RemoveDuplicates.gs verander of verwyder NIE. Dit is 'n aparte lêer in die Google Apps Script-projek.
+4. Die oplaai-bladsy gebruik Upload.html: behou jou bestaande Upload.html; as dit nie bestaan nie, voeg een HTML-lêer genaamd 'Upload' by met die ingeslote google-apps-script/Upload.html.
+5. Save, dan Deploy > Manage deployments > Edit > New version > Deploy.
+   BEHOU: Execute as Me en Who has access Anyone; dieselfde bestaande /exec-URL.
+6. Kies die 'testFlip60'-funksie en voer dit uit om die nuwe eerste drie items se volgorde te kontroleer (as jy wil).
+
+BELANGRIK
+Die webwerf sorteer ook self van nuutste na oudste. Dit sal dus reg vertoon al is die vorige Apps Script-weergawe nog aktief, sodra die webwerf ontplooi is. Sodra die nuwe Apps Script ontplooi word, stem die bediener en webwerf se volgorde ooreen.
+
+ORIËNTASIE
+EXIF-oriëntasie word deur Sharp op die bediener reggestel. Party WhatsApp- of geredigeerde foto's bevat geen bruikbare oriëntasiedata nie. Dit is nie veilig om sommer alle wydte/hoogte-verhoudings te raai en te draai nie. Vir so 'n uitsondering kan 'n spesifieke Drive-file-ID met 'n 90-, 180- of 270-grade visuele regstelling ingestel word; dit verander nie Drive nie. Gee die naam van die foutiewe foto sodat 'n volledige vervangings-ZIP voorberei kan word, eerder as om self kode te verander.
+
+VERIFIKASIE
+- Plaaslike blaaierproef: 3 volgorde-toetsfoto's (oudste aangelewer eerste) vertoon met nuutste eerste en volgende na 8 sekondes.
+- Plaaslike mobiele stresproef: 244 media-inskrywings sonder afsny van die album of horisontale oorloop.
+- Sharp-proef: EXIF-rotasie 6 (90 grade) word omgeskakel, gewone portret bly onveranderd, opsionele 90-grade regstelling werk.
+- Regstreekse Google Drive-toegang, oplaai en YouTube-afspeel moet na ontplooiing op die publieke URL getoets word.
+- Die Still On Fire / Don-projek is nie verander nie.
